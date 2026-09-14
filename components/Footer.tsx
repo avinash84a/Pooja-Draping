@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import {
   MapPin,
   Phone,
@@ -11,7 +12,8 @@ import {
   ExternalLink,
   Heart,
   ArrowUp,
-  ShieldCheck,
+  Globe,
+  Sparkles,
 } from 'lucide-react';
 
 interface FooterProps {
@@ -20,7 +22,9 @@ interface FooterProps {
 
 export default function Footer({ onAdminClick }: FooterProps) {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   return (
@@ -46,12 +50,12 @@ export default function Footer({ onAdminClick }: FooterProps) {
               </div>
             </div>
 
-            <p className="text-sm text-amber-100/85 italic leading-relaxed font-serif">
-              “सुंदर साडी ड्रॅपिंग शिका आणि आत्मविश्वासाने साडी नेसा.”
+            <p className="text-sm text-amber-100/90 italic leading-relaxed font-serif">
+              “सुंदर साडी ड्रॅपिंग शिका आणि प्रत्येक सण-समारंभात आत्मविश्वासाने साडी नेसा.”
             </p>
 
             <p className="text-xs text-[#E0CDD0] leading-relaxed max-w-md">
-              पुण्यातील सिंहगड रोड परिसरातील अग्रगण्य व ५-स्टार मानांकित साडी ड्रॅपिंग प्रशिक्षण केंद्र. गौरी महालक्ष्मी, नऊवारी, ब्राह्मणी व डिझायनर साडी ड्रॅपिंगचे प्रत्यक्ष हँड्स-ऑन प्रॅक्टिकल.
+              पुण्यातील सिंहगड रोड परिसरातील अग्रगण्य व ५.०-स्टार मानांकित साडी ड्रॅपिंग प्रशिक्षण केंद्र. गौरी महालक्ष्मी, नऊवारी, ब्राह्मणी, रुक्मिणी व डिझायनर साडी ड्रॅपिंगचे प्रत्यक्ष हँड्स-ऑन प्रॅक्टिकल.
             </p>
 
             {/* Google Rating Pill */}
@@ -61,67 +65,53 @@ export default function Footer({ onAdminClick }: FooterProps) {
                   <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <span className="font-bold">5.0 (33 Google Reviews)</span>
+              <span className="font-bold">5.0 (33+ Google Reviews)</span>
             </div>
           </div>
 
           {/* Quick Links */}
           <div className="lg:col-span-3 space-y-3">
             <h4 className="text-sm font-bold text-white uppercase tracking-wider font-serif">
-              महत्त्वाचे दुवे (Quick Links)
+              महत्त्वाचे दुवे (Pages)
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm text-[#E0CDD0]">
               <li>
-                <a href="#home" className="hover:text-amber-300 transition-colors">
-                  मुख्यपृष्ठ (Home)
-                </a>
+                <Link href="/" className="hover:text-amber-300 transition-colors">
+                  मुखपृष्ठ (Home)
+                </Link>
               </li>
               <li>
-                <a href="#about" className="hover:text-amber-300 transition-colors">
-                  पूजा मॅडमबद्दल (About)
-                </a>
+                <Link href="/workshop" className="hover:text-amber-300 transition-colors">
+                  १ डे वर्कशॉप (1-Day Workshop)
+                </Link>
               </li>
               <li>
-                <a href="#workshop" className="hover:text-amber-300 transition-colors">
-                  1 डे वर्कशॉप (Workshops)
-                </a>
-              </li>
-              <li>
-                <a href="#styles" className="hover:text-amber-300 transition-colors">
-                  साडी ड्रॅपिंग प्रकार (Draping Styles)
-                </a>
-              </li>
-              <li>
-                <a href="#reviews" className="hover:text-amber-300 transition-colors">
-                  विद्यार्थिनींचे रिव्ह्यूज (Reviews)
-                </a>
-              </li>
-              <li>
-                <a href="#gallery" className="hover:text-amber-300 transition-colors">
+                <Link href="/gallery" className="hover:text-amber-300 transition-colors">
                   फोटो गॅलरी (Gallery)
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#location" className="hover:text-amber-300 transition-colors">
-                  आमचे ठिकाण (Location)
-                </a>
+                <Link href="/about" className="hover:text-amber-300 transition-colors">
+                  आमच्याबद्दल (About Pooja Patil)
+                </Link>
               </li>
               <li>
-                <a href="#faq" className="hover:text-amber-300 transition-colors">
-                  प्रश्नोत्तरे (FAQs)
+                <Link href="/contact" className="hover:text-amber-300 transition-colors">
+                  संपर्क व पत्ता (Contact & Studio)
+                </Link>
+              </li>
+              <li className="pt-2 border-t border-white/10">
+                <a
+                  href="https://avipatil.live/cmspooja/wp-admin/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-amber-300 hover:text-amber-200 font-semibold transition-colors"
+                >
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>WordPress CMS Admin</span>
+                  <ExternalLink className="w-3 h-3 text-white/50" />
                 </a>
               </li>
-              {onAdminClick && (
-                <li className="pt-1 border-t border-white/10">
-                  <button
-                    onClick={onAdminClick}
-                    className="inline-flex items-center gap-1.5 text-amber-300 hover:text-amber-200 font-semibold transition-colors cursor-pointer"
-                  >
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>🔐 ॲडमिन पॅनेल (Admin CMS)</span>
-                  </button>
-                </li>
-              )}
             </ul>
           </div>
 
@@ -136,7 +126,7 @@ export default function Footer({ onAdminClick }: FooterProps) {
                 <MapPin className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                 <p>
                   साईप्रभा हाऊस, जगताप हॉस्पिटल समोर,<br />
-                  सिंहगड रोड, आनंद नगर, पुणे - 411051
+                  सिंहगड रोड, आनंद नगर, पुणे - ४११०५१, महाराष्ट्र.
                 </p>
               </div>
 
@@ -150,56 +140,48 @@ export default function Footer({ onAdminClick }: FooterProps) {
               <div className="flex items-center gap-2.5">
                 <MessageCircle className="w-4 h-4 text-emerald-400 shrink-0" />
                 <a
-                  href="https://wa.me/918446917187"
+                  href="https://wa.me/918446917187?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A4%8F%E0%A4%BE%E0%A4%B0%20%E0%A4%AA%E0%A5%82%E0%A4%9C%E0%A4%BE%20%E0%A4%A4%E0%A4%BE%E0%A4%88"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white font-semibold text-emerald-400"
                 >
-                  WhatsApp वर चॅट करा
+                  WhatsApp वर थेट चॅट करा
                 </a>
               </div>
             </div>
 
             {/* Social Links */}
             <div className="pt-2">
-              <span className="text-xs text-gray-400 block mb-2 font-medium">आम्हाला फॉलो करा:</span>
+              <span className="text-xs text-gray-400 block mb-2 font-medium">फॉलो व शेअर करा:</span>
               <div className="flex items-center gap-2.5">
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Instagram"
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
-                >
-                  <Instagram className="w-4 h-4" />
-                </a>
-                <a
-                  href="https://facebook.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Facebook"
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
-                >
-                  <Facebook className="w-4 h-4" />
-                </a>
                 <a
                   href="https://wa.me/918446917187"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WhatsApp"
-                  className="w-9 h-9 rounded-full bg-emerald-600/80 hover:bg-emerald-600 text-white flex items-center justify-center transition-colors"
+                  className="w-9 h-9 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center transition-colors shadow"
                 >
                   <MessageCircle className="w-4 h-4" />
                 </a>
                 <a
-                  href="https://www.google.com/maps/search/?api=1&query=Pooja+Saree+Draping+Pune"
+                  href="https://www.google.com/maps/search/?api=1&query=Pooja+Saree+Draping+Anand+Nagar+Sinhgad+Road+Pune"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Google Business Profile"
+                  aria-label="Google Business Location"
                   className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
-                  title="Google Business Profile"
+                  title="Google Maps"
                 >
-                  <ExternalLink className="w-4 h-4" />
+                  <MapPin className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://avipatil.live/cmspooja/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WordPress CMS"
+                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                  title="WordPress CMS Site"
+                >
+                  <Globe className="w-4 h-4" />
                 </a>
               </div>
             </div>
@@ -213,18 +195,15 @@ export default function Footer({ onAdminClick }: FooterProps) {
             <p>
               © {new Date().getFullYear()} Pooja Saree Draping Pune. All rights reserved.
             </p>
-            {onAdminClick && (
-              <button
-                onClick={onAdminClick}
-                className="text-gray-400 hover:text-amber-300 transition-colors text-[11px] underline underline-offset-2 cursor-pointer"
-              >
-                व्यवस्थापक लॉगिन (Admin Portal)
-              </button>
-            )}
+            <span className="text-white/30">|</span>
+            <span className="text-amber-200/80">
+              Powered by Next.js & WordPress Headless CMS (avipatil.live/cmspooja)
+            </span>
           </div>
+
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
-              Made with <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> for Pune Women
+              Made with <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> for Maharashtra Women
             </span>
             <button
               onClick={scrollToTop}
