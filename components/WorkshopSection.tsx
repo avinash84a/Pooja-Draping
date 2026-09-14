@@ -18,6 +18,7 @@ import EditWorkshopModal, { WorkshopConfig } from './EditWorkshopModal';
 
 interface WorkshopSectionProps {
   onBookClick: () => void;
+  refreshKey?: number;
 }
 
 const DEFAULT_WORKSHOP_CONFIG: WorkshopConfig = {
@@ -32,7 +33,7 @@ const DEFAULT_WORKSHOP_CONFIG: WorkshopConfig = {
   venue: 'साईप्रभा हाऊस, जगताप हॉस्पिटल समोर, सिंहगड रोड, आनंद नगर, पुणे - 411051',
 };
 
-export default function WorkshopSection({ onBookClick }: WorkshopSectionProps) {
+export default function WorkshopSection({ onBookClick, refreshKey }: WorkshopSectionProps) {
   const [config, setConfig] = useState<WorkshopConfig>(() => {
     if (typeof window === 'undefined') return DEFAULT_WORKSHOP_CONFIG;
     try {
@@ -56,13 +57,14 @@ export default function WorkshopSection({ onBookClick }: WorkshopSectionProps) {
       }
     };
 
+    handleConfigUpdate();
     window.addEventListener('pooja_workshop_updated', handleConfigUpdate);
     window.addEventListener('storage', handleConfigUpdate);
     return () => {
       window.removeEventListener('pooja_workshop_updated', handleConfigUpdate);
       window.removeEventListener('storage', handleConfigUpdate);
     };
-  }, []);
+  }, [refreshKey]);
 
   const handleSaveConfig = (newConfig: WorkshopConfig) => {
     setConfig(newConfig);

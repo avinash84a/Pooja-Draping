@@ -34,8 +34,18 @@ import {
   HelpCircle,
 } from 'lucide-react';
 import businessData from '../data/business-data.json';
-import { GalleryItem } from './StudentGallerySection';
 import { WorkshopConfig } from './EditWorkshopModal';
+import {
+  GalleryItem,
+  getInitialGallery,
+  loadGalleryAsync,
+  saveGalleryAsync,
+  compressImageFile,
+  getInitialStyles,
+  saveStylesAsync,
+} from '../lib/galleryStorage';
+
+export type { GalleryItem };
 
 export interface BookingLead {
   id: string;
@@ -138,16 +148,7 @@ export default function AdminPanelModal({ isOpen, onClose, onDataChanged }: Admi
   // -------------------------------------------------------------
   // 1. GALLERY STATE & HANDLERS
   // -------------------------------------------------------------
-  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(() => {
-    if (typeof window === 'undefined') return businessData.galleryItems as GalleryItem[];
-    try {
-      const saved = localStorage.getItem('pooja_saree_gallery_items_v2');
-      if (saved) return JSON.parse(saved);
-      return businessData.galleryItems as GalleryItem[];
-    } catch {
-      return businessData.galleryItems as GalleryItem[];
-    }
-  });
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(() => getInitialGallery());
   const [gallerySearch, setGallerySearch] = useState<string>('');
   const [galleryCategory, setGalleryCategory] = useState<string>('all');
   
@@ -170,29 +171,21 @@ export default function AdminPanelModal({ isOpen, onClose, onDataChanged }: Admi
   const [replacingItem, setReplacingItem] = useState<GalleryItem | null>(null);
   const replaceFileRef = useRef<HTMLInputElement | null>(null);
 
-  // Load Gallery
-  const loadGallery = () => {
-    try {
-      const saved = localStorage.getItem('pooja_saree_gallery_items_v2');
-      if (saved) {
-        setGalleryItems(JSON.parse(saved));
-        return;
-      }
-      setGalleryItems(businessData.galleryItems as GalleryItem[]);
-    } catch {
-      setGalleryItems(businessData.galleryItems as GalleryItem[]);
+  // Sync latest gallery data when modal is opened
+  useEffect(() => {
+    if (isOpen) {
+      loadGalleryAsync().then((items) => {
+        if (items && items.length > 0) {
+          setGalleryItems(items);
+        }
+      });
     }
-  };
+  }, [isOpen]);
 
-  const saveGalleryItems = (items: GalleryItem[]) => {
+  const saveGalleryItems = async (items: GalleryItem[]) => {
     setGalleryItems(items);
-    try {
-      localStorage.setItem('pooja_saree_gallery_items_v2', JSON.stringify(items));
-    } catch {
-      // ignore
-    }
+    await saveGalleryAsync(items);
     if (onDataChanged) onDataChanged();
-    window.dispatchEvent(new Event('pooja_gallery_updated'));
   };
 
   const handleAddPhotoSubmit = (e: React.FormEvent) => {
@@ -246,28 +239,28 @@ export default function AdminPanelModal({ isOpen, onClose, onDataChanged }: Admi
     showToast('फोटो माहिती अपडेट झाली! ✅');
   };
 
-  const handleReplacePhotoFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleReplacePhotoFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !replacingItem) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const newUrl = reader.result as string;
+    try {
+      const compressed = await compressImageFile(file);
       const updated = galleryItems.map((item) => {
         if (item.id === replacingItem.id) {
           return {
             ...item,
-            image: newUrl,
+            image: compressed,
             isCustom: true,
           };
         }
         return item;
       });
-      saveGalleryItems(updated);
+      await saveGalleryItems(updated);
       setReplacingItem(null);
       showToast('फोटो यशस्वीरित्या बदलला गेला! ✨');
-    };
-    reader.readAsDataURL(file);
+    } catch {
+      showToast('फोटो बदलताना त्रुटी आली.');
+    }
   };
 
   const handleDeletePhoto = (id: string) => {
@@ -300,64 +293,33 @@ export default function AdminPanelModal({ isOpen, onClose, onDataChanged }: Admi
   // -------------------------------------------------------------
   // 2. STYLES STATE & HANDLERS
   // -------------------------------------------------------------
-  const [styleImages, setStyleImages] = useState<Record<number, string>>(() => {
-    if (typeof window === 'undefined') return {};
-    try {
-      const saved = localStorage.getItem('pooja_custom_style_images');
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
-  });
+  const [styleImages, setStyleImages] = useState<Record<number, string>>(() => getInitialStyles());
   const [styleSearch, setStyleSearch] = useState<string>('');
   const [editingStyleId, setEditingStyleId] = useState<number | null>(null);
   const styleImageFileRef = useRef<HTMLInputElement | null>(null);
 
-  const loadStyles = () => {
-    try {
-      const saved = localStorage.getItem('pooja_custom_style_images');
-      if (saved) {
-        setStyleImages(JSON.parse(saved));
-        return;
-      }
-    } catch {
-      // ignore
-    }
-    setStyleImages({});
-  };
-
-  const handleStylePhotoChange = (styleId: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleStylePhotoChange = async (styleId: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const newImg = reader.result as string;
-      const updated = { ...styleImages, [styleId]: newImg };
+    try {
+      const compressed = await compressImageFile(file);
+      const updated = { ...styleImages, [styleId]: compressed };
       setStyleImages(updated);
-      try {
-        localStorage.setItem('pooja_custom_style_images', JSON.stringify(updated));
-      } catch {
-        // ignore
-      }
+      await saveStylesAsync(updated);
       if (onDataChanged) onDataChanged();
-      window.dispatchEvent(new Event('pooja_styles_updated'));
       showToast('साडी प्रकाराचा फोटो अपडेट झाला! 👗');
-    };
-    reader.readAsDataURL(file);
+    } catch {
+      showToast('फोटो अपडेट करताना त्रुटी आली.');
+    }
   };
 
-  const handleResetStyleImage = (styleId: number) => {
+  const handleResetStyleImage = async (styleId: number) => {
     const updated = { ...styleImages };
     delete updated[styleId];
     setStyleImages(updated);
-    try {
-      localStorage.setItem('pooja_custom_style_images', JSON.stringify(updated));
-    } catch {
-      // ignore
-    }
+    await saveStylesAsync(updated);
     if (onDataChanged) onDataChanged();
-    window.dispatchEvent(new Event('pooja_styles_updated'));
     showToast('मूळ साडी फोटो पूर्ववत झाला! 🔄');
   };
 
@@ -1510,12 +1472,17 @@ export default function AdminPanelModal({ isOpen, onClose, onDataChanged }: Admi
                     ref={addFileRef}
                     type="file"
                     accept="image/*"
-                    onChange={(e) => {
+                    onChange={async (e) => {
                       const file = e.target.files?.[0];
                       if (!file) return;
-                      const reader = new FileReader();
-                      reader.onloadend = () => setAddImgUrl(reader.result as string);
-                      reader.readAsDataURL(file);
+                      try {
+                        const compressed = await compressImageFile(file);
+                        setAddImgUrl(compressed);
+                      } catch {
+                        const reader = new FileReader();
+                        reader.onloadend = () => setAddImgUrl(reader.result as string);
+                        reader.readAsDataURL(file);
+                      }
                     }}
                     className="hidden"
                   />
@@ -1632,12 +1599,17 @@ export default function AdminPanelModal({ isOpen, onClose, onDataChanged }: Admi
                     ref={editFileRef}
                     type="file"
                     accept="image/*"
-                    onChange={(e) => {
+                    onChange={async (e) => {
                       const file = e.target.files?.[0];
                       if (!file) return;
-                      const reader = new FileReader();
-                      reader.onloadend = () => setEditImgUrl(reader.result as string);
-                      reader.readAsDataURL(file);
+                      try {
+                        const compressed = await compressImageFile(file);
+                        setEditImgUrl(compressed);
+                      } catch {
+                        const reader = new FileReader();
+                        reader.onloadend = () => setEditImgUrl(reader.result as string);
+                        reader.readAsDataURL(file);
+                      }
                     }}
                     className="hidden"
                   />

@@ -22,6 +22,11 @@ export default function Home() {
   const [preselectedStyle, setPreselectedStyle] = useState<string | undefined>();
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [dataRefreshKey, setDataRefreshKey] = useState(0);
+
+  const handleDataChanged = () => {
+    setDataRefreshKey((prev) => prev + 1);
+  };
 
   useEffect(() => {
     const checkAdmin = () => {
@@ -69,10 +74,10 @@ export default function Home() {
         <AboutSection onExploreStylesClick={scrollToStyles} />
 
         {/* 1-Day Workshop Section with Editable Fields */}
-        <WorkshopSection onBookClick={() => scrollToBooking()} />
+        <WorkshopSection refreshKey={dataRefreshKey} onBookClick={() => scrollToBooking()} />
 
         {/* 14+ Saree Draping Styles Showcase */}
-        <StylesSection onBookClick={(styleName) => scrollToBooking(styleName)} />
+        <StylesSection refreshKey={dataRefreshKey} onBookClick={(styleName) => scrollToBooking(styleName)} />
 
         {/* Why Learn From Pooja? */}
         <WhyChooseSection />
@@ -81,7 +86,7 @@ export default function Home() {
         <TestimonialsSection />
 
         {/* Student Gallery & Workshop Moments */}
-        <StudentGallerySection />
+        <StudentGallerySection refreshKey={dataRefreshKey} />
 
         {/* 6-Step Workshop Learning Roadmap */}
         <WorkshopProcessSection />
@@ -127,6 +132,7 @@ export default function Home() {
       <AdminPanelModal
         isOpen={isAdminOpen}
         onClose={() => setIsAdminOpen(false)}
+        onDataChanged={handleDataChanged}
       />
     </div>
   );

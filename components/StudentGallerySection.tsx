@@ -17,16 +17,15 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import businessData from '../data/business-data.json';
+import {
+  GalleryItem,
+  getInitialGallery,
+  loadGalleryAsync,
+  saveGalleryAsync,
+  compressImageFile,
+} from '../lib/galleryStorage';
 
-export interface GalleryItem {
-  id: string;
-  title: string;
-  subtitle: string;
-  category: string;
-  categoryMarathi?: string;
-  image: string;
-  isCustom?: boolean;
-}
+export type { GalleryItem };
 
 const CATEGORY_OPTIONS = [
   { value: 'Gauri Draping', label: '🌸 गौरी महालक्ष्मी (Gauri Draping)', marathi: 'गौरी महालक्ष्मी' },
@@ -36,55 +35,22 @@ const CATEGORY_OPTIONS = [
   { value: 'Certificates', label: '🎓 प्रमाणपत्र (Certificates)', marathi: 'प्रमाणपत्र' },
 ];
 
-export default function StudentGallerySection() {
+export interface StudentGallerySectionProps {
+  refreshKey?: number;
+}
+
+export default function StudentGallerySection({ refreshKey }: StudentGallerySectionProps = {}) {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [toastMessage, setToastMessage] = useState<string>('');
 
-  // Main gallery items state
-  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(() => {
-    if (typeof window === 'undefined') return businessData.galleryItems as GalleryItem[];
-    try {
-      const saved = localStorage.getItem('pooja_saree_gallery_items_v2');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-
-      // Check legacy items
-      let legacyCustom: GalleryItem[] = [];
-      const legacySaved = localStorage.getItem('pooja_saree_custom_gallery');
-      if (legacySaved) {
-        legacyCustom = JSON.parse(legacySaved);
-      }
-
-      let styleImages: Record<number, string> = {};
-      const savedStyles = localStorage.getItem('pooja_custom_style_images');
-      if (savedStyles) {
-        styleImages = JSON.parse(savedStyles);
-      }
-
-      const initialDefaults = (businessData.galleryItems as GalleryItem[]).map((item) => {
-        if (item.id === 'g-9' && styleImages[10]) {
-          return { ...item, image: styleImages[10] };
-        }
-        return { ...item, isCustom: false };
-      });
-
-      return [...legacyCustom, ...initialDefaults];
-    } catch {
-      return businessData.galleryItems as GalleryItem[];
-    }
-  });
+  // Main gallery items state with robust dual-layer persistence
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(() => getInitialGallery());
 
   // Helper to persist gallery items
-  const persistGallery = (items: GalleryItem[]) => {
+  const persistGallery = async (items: GalleryItem[]) => {
     setGalleryItems(items);
-    try {
-      localStorage.setItem('pooja_saree_gallery_items_v2', JSON.stringify(items));
-    } catch {
-      // ignore
-    }
+    await saveGalleryAsync(items);
   };
 
   const showToast = (msg: string) => {
@@ -94,20 +60,25 @@ export default function StudentGallerySection() {
     }, 3500);
   };
 
-  // Synchronize with Admin Panel updates
+  // Synchronize with Admin Panel updates & IndexedDB
   useEffect(() => {
-    const handleSync = () => {
-      try {
-        const saved = localStorage.getItem('pooja_saree_gallery_items_v2');
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed)) {
-            setGalleryItems(parsed);
-          }
-        }
-      } catch {
-        // ignore
+    // Asynchronously fetch latest data from IndexedDB / Storage
+    loadGalleryAsync().then((items) => {
+      if (items && items.length > 0) {
+        setGalleryItems(items);
       }
+    });
+
+    const handleSync = (e?: Event) => {
+      if (e instanceof CustomEvent && e.detail && Array.isArray(e.detail)) {
+        setGalleryItems(e.detail);
+        return;
+      }
+      loadGalleryAsync().then((items) => {
+        if (items && items.length > 0) {
+          setGalleryItems(items);
+        }
+      });
     };
 
     window.addEventListener('pooja_gallery_updated', handleSync);
@@ -116,7 +87,7 @@ export default function StudentGallerySection() {
       window.removeEventListener('pooja_gallery_updated', handleSync);
       window.removeEventListener('storage', handleSync);
     };
-  }, []);
+  }, [refreshKey]);
 
   // Modals state
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
@@ -210,7 +181,7 @@ export default function StudentGallerySection() {
     setIsAddModalOpen(true);
   };
 
-  const handleAddFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAddFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     setAddError('');
     if (!file) return;
@@ -220,11 +191,16 @@ export default function StudentGallerySection() {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setAddPreviewUrl(reader.result as string);
-    };
-    reader.readAsDataURL(file);
+    try {
+      const compressed = await compressImageFile(file);
+      setAddPreviewUrl(compressed);
+    } catch {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAddPreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSaveNewPhoto = (e: React.FormEvent) => {
@@ -263,7 +239,7 @@ export default function StudentGallerySection() {
     setEditError('');
   };
 
-  const handleEditFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEditFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     setEditError('');
     if (!file) return;
@@ -273,11 +249,16 @@ export default function StudentGallerySection() {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setEditPreviewUrl(reader.result as string);
-    };
-    reader.readAsDataURL(file);
+    try {
+      const compressed = await compressImageFile(file);
+      setEditPreviewUrl(compressed);
+    } catch {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditPreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSaveEditPhoto = (e: React.FormEvent) => {
@@ -318,7 +299,7 @@ export default function StudentGallerySection() {
     setReplaceError('');
   };
 
-  const handleReplaceFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleReplaceFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     setReplaceError('');
     if (!file) return;
@@ -328,11 +309,16 @@ export default function StudentGallerySection() {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setReplacePreviewUrl(reader.result as string);
-    };
-    reader.readAsDataURL(file);
+    try {
+      const compressed = await compressImageFile(file);
+      setReplacePreviewUrl(compressed);
+    } catch {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setReplacePreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSaveReplacedPhoto = (e: React.FormEvent) => {

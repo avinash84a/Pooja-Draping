@@ -18,39 +18,32 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import businessData from '../data/business-data.json';
+import {
+  compressImageFile,
+  getInitialStyles,
+  saveStylesAsync,
+} from '../lib/galleryStorage';
 
 interface StylesSectionProps {
   onBookClick: (styleName?: string) => void;
+  refreshKey?: number;
 }
 
-export default function StylesSection({ onBookClick }: StylesSectionProps) {
+export default function StylesSection({ onBookClick, refreshKey }: StylesSectionProps) {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedStyle, setSelectedStyle] = useState<any | null>(null);
 
   // Custom Images state with localStorage persistence
-  const [customImages, setCustomImages] = useState<Record<number, string>>(() => {
-    if (typeof window === 'undefined') return {};
-    try {
-      const saved = localStorage.getItem('pooja_custom_style_images');
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
-  });
+  const [customImages, setCustomImages] = useState<Record<number, string>>(() => getInitialStyles());
 
   useEffect(() => {
-    const handleSync = () => {
-      try {
-        const saved = localStorage.getItem('pooja_custom_style_images');
-        if (saved) {
-          setCustomImages(JSON.parse(saved));
-        } else {
-          setCustomImages({});
-        }
-      } catch {
-        // ignore
+    const handleSync = (e?: Event) => {
+      if (e && (e as CustomEvent).detail?.styles) {
+        setCustomImages((e as CustomEvent).detail.styles);
+        return;
       }
+      setCustomImages(getInitialStyles());
     };
 
     window.addEventListener('pooja_styles_updated', handleSync);
@@ -59,7 +52,7 @@ export default function StylesSection({ onBookClick }: StylesSectionProps) {
       window.removeEventListener('pooja_styles_updated', handleSync);
       window.removeEventListener('storage', handleSync);
     };
-  }, []);
+  }, [refreshKey]);
 
   // Modal for changing photo of a style
   const [editingPhotoStyle, setEditingPhotoStyle] = useState<any | null>(null);
@@ -83,7 +76,7 @@ export default function StylesSection({ onBookClick }: StylesSectionProps) {
     setPhotoError('');
   };
 
-  const handleStyleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleStyleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     setPhotoError('');
     if (!file) return;
@@ -93,14 +86,19 @@ export default function StylesSection({ onBookClick }: StylesSectionProps) {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPhotoPreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
+    try {
+      const compressed = await compressImageFile(file);
+      setPhotoPreview(compressed);
+    } catch {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
-  const handleSaveStylePhoto = (e: React.FormEvent) => {
+  const handleSaveStylePhoto = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!photoPreview) {
       setPhotoError('कृपया इमेज निवडा.');
@@ -113,11 +111,7 @@ export default function StylesSection({ onBookClick }: StylesSectionProps) {
         [editingPhotoStyle.id]: photoPreview,
       };
       setCustomImages(updated);
-      try {
-        localStorage.setItem('pooja_custom_style_images', JSON.stringify(updated));
-      } catch {
-        // ignore
-      }
+      await saveStylesAsync(updated);
 
       // Also update selectedStyle if open
       if (selectedStyle && selectedStyle.id === editingPhotoStyle.id) {
@@ -133,16 +127,12 @@ export default function StylesSection({ onBookClick }: StylesSectionProps) {
     setPhotoError('');
   };
 
-  const handleResetStylePhoto = () => {
+  const handleResetStylePhoto = async () => {
     if (!editingPhotoStyle) return;
     const updated = { ...customImages };
     delete updated[editingPhotoStyle.id];
     setCustomImages(updated);
-    try {
-      localStorage.setItem('pooja_custom_style_images', JSON.stringify(updated));
-    } catch {
-      // ignore
-    }
+    await saveStylesAsync(updated);
     if (selectedStyle && selectedStyle.id === editingPhotoStyle.id) {
       setSelectedStyle({
         ...selectedStyle,
