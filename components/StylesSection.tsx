@@ -280,7 +280,7 @@ export default function StylesSection({ onBookClick, refreshKey, customImages: p
                 {/* Image Preview Container */}
                 <div className="relative h-64 w-full overflow-hidden bg-gray-100">
                   <img
-                    src={currentImg}
+                    src={currentImg || item.image || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80'}
                     alt={item.nameMarathi}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     referrerPolicy="no-referrer"
@@ -423,7 +423,7 @@ export default function StylesSection({ onBookClick, refreshKey, customImages: p
             {/* Modal Image */}
             <div className="relative h-64 sm:h-72 w-full bg-gray-100">
               <img
-                src={getStyleImage(selectedStyle)}
+                src={getStyleImage(selectedStyle) || selectedStyle.image || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80'}
                 alt={selectedStyle.nameMarathi}
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"

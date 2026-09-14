@@ -12,10 +12,23 @@ interface BookingCTAProps {
 export default function BookingCTA({ workshopData, onBookClick }: BookingCTAProps) {
   const fees = workshopData?.fees || 1500;
   const advanceFee = workshopData?.advanceFee || 500;
-  const whatsappNumber = workshopData?.whatsappNumber || '8446917187';
-  const whatsappMessage =
-    workshopData?.whatsappMessage ||
-    'नमस्कार पूजा ताई, मला १ डे साडी ड्रॅपिंग वर्कशॉपसाठी नाव नोंदवायचे आहे. कृपया पुढील बॅचचे डिटेल्स व Google Pay/UPI नंबर पाठवा.';
+
+  // Defensively guarantee primitive string to prevent invalid React child objects
+  const rawNum = workshopData?.whatsappNumber;
+  const whatsappNumber: string =
+    typeof rawNum === 'string' && rawNum.trim() !== ''
+      ? rawNum.trim()
+      : typeof rawNum === 'object' && rawNum !== null && 'number' in (rawNum as any)
+      ? String((rawNum as any).number)
+      : '8446917187';
+
+  const rawMsg = workshopData?.whatsappMessage;
+  const whatsappMessage: string =
+    typeof rawMsg === 'string' && rawMsg.trim() !== ''
+      ? rawMsg.trim()
+      : typeof rawMsg === 'object' && rawMsg !== null && 'message' in (rawMsg as any)
+      ? String((rawMsg as any).message)
+      : 'नमस्कार पूजा ताई, मला १ डे साडी ड्रॅपिंग वर्कशॉपसाठी नाव नोंदवायचे आहे. कृपया पुढील बॅचचे डिटेल्स व Google Pay/UPI नंबर पाठवा.';
 
   const whatsappUrl = `https://wa.me/91${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 

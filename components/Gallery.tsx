@@ -104,8 +104,8 @@ export default function Gallery({
                 {/* Image Wrap */}
                 <div className="relative aspect-[3/4] w-full bg-stone-100 overflow-hidden">
                   <Image
-                    src={photo.imageUrl}
-                    alt={photo.altText || photo.title}
+                    src={photo.imageUrl || 'https://avipatil.live/cmspooja/wp-content/uploads/%E0%A4%97%E0%A5%8C%E0%A4%B0%E0%A5%80-%E0%A4%AE%E0%A4%B9%E0%A4%BE%E0%A4%B2%E0%A4%95%E0%A5%8D%E0%A4%AE%E0%A5%80/WhatsApp-Image-2026-09-07-at-12.32.19-AM.jpeg'}
+                    alt={photo.altText?.trim() || photo.title?.trim() || 'पूजा साडी ड्रॅपिंग फोटो'}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     className="object-cover object-top group-hover:scale-105 transition-transform duration-500"

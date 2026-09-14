@@ -108,25 +108,46 @@ export async function getWorkshopDetails(): Promise<WorkshopData> {
       });
       if (customRes.ok) {
         const json = await customRes.json();
-        if (json?.data && json.data.title) {
-          const d = json.data;
+        const d = json?.data || json?.settings;
+        if (d && (d.title || d.workshop_title)) {
+          // Robust normalization of whatsappNumber and whatsappMessage
+          let whatsappNumber = DEFAULT_WORKSHOP_DATA.whatsappNumber;
+          let whatsappMessage = DEFAULT_WORKSHOP_DATA.whatsappMessage;
+          if (typeof d.whatsapp === 'object' && d.whatsapp !== null) {
+            if (d.whatsapp.number) whatsappNumber = String(d.whatsapp.number);
+            if (d.whatsapp.message) whatsappMessage = String(d.whatsapp.message);
+          } else if (typeof d.whatsapp === 'string' && d.whatsapp.trim()) {
+            whatsappNumber = d.whatsapp.trim();
+          } else if (d.whatsapp_number) {
+            whatsappNumber = String(d.whatsapp_number);
+          }
+          if (d.whatsapp_message && typeof d.whatsapp_message === 'string') {
+            whatsappMessage = d.whatsapp_message;
+          }
+
+          const rawHeroImg = d.heroImage || d.hero_image;
+          const heroImage =
+            typeof rawHeroImg === 'string' && rawHeroImg.trim() !== ''
+              ? rawHeroImg.trim()
+              : DEFAULT_WORKSHOP_DATA.heroImage;
+
           return {
-            title: d.title || DEFAULT_WORKSHOP_DATA.title,
+            title: d.workshop_title || d.title || DEFAULT_WORKSHOP_DATA.title,
             subtitle: d.subtitle || DEFAULT_WORKSHOP_DATA.subtitle,
             instructor: d.instructor || 'पूजा पाटील',
             description: d.description || DEFAULT_WORKSHOP_DATA.description,
-            date: d.date || DEFAULT_WORKSHOP_DATA.date,
-            time: d.time || DEFAULT_WORKSHOP_DATA.time,
-            location: d.location || DEFAULT_WORKSHOP_DATA.location,
-            locationDetails: d.location_details || DEFAULT_WORKSHOP_DATA.locationDetails,
-            fees: Number(d.fees || DEFAULT_WORKSHOP_DATA.fees),
-            advanceFee: Number(d.advance_fee || DEFAULT_WORKSHOP_DATA.advanceFee),
-            whatsappNumber: d.whatsapp_number || DEFAULT_WORKSHOP_DATA.whatsappNumber,
-            whatsappMessage: d.whatsapp_message || DEFAULT_WORKSHOP_DATA.whatsappMessage,
+            date: d.default_date || d.date || DEFAULT_WORKSHOP_DATA.date,
+            time: d.default_time || d.time || DEFAULT_WORKSHOP_DATA.time,
+            location: d.address_short || d.location || DEFAULT_WORKSHOP_DATA.location,
+            locationDetails: d.fullAddress || d.address_full || d.location_details || DEFAULT_WORKSHOP_DATA.locationDetails,
+            fees: Number(d.fee || d.fees || DEFAULT_WORKSHOP_DATA.fees),
+            advanceFee: Number(d.advanceFee || d.advance_fee || DEFAULT_WORKSHOP_DATA.advanceFee),
+            whatsappNumber,
+            whatsappMessage,
             highlights: Array.isArray(d.highlights) && d.highlights.length > 0 ? d.highlights : DEFAULT_WORKSHOP_DATA.highlights,
-            patternsCount: d.patterns_count || DEFAULT_WORKSHOP_DATA.patternsCount,
-            seatsLeft: d.seats_left !== undefined ? Number(d.seats_left) : DEFAULT_WORKSHOP_DATA.seatsLeft,
-            heroImage: d.hero_image || DEFAULT_WORKSHOP_DATA.heroImage,
+            patternsCount: d.patternCount || d.patterns_count || DEFAULT_WORKSHOP_DATA.patternsCount,
+            seatsLeft: d.seatsAvailable !== undefined ? Number(d.seatsAvailable) : d.seats_left !== undefined ? Number(d.seats_left) : DEFAULT_WORKSHOP_DATA.seatsLeft,
+            heroImage,
             isFromWordPress: true,
           };
         }
@@ -147,6 +168,26 @@ export async function getWorkshopDetails(): Promise<WorkshopData> {
     // Strip HTML tags for clean text snippets if needed
     const cleanContent = page.content?.rendered?.replace(/<[^>]+>/g, '').trim() || '';
 
+    let acfWhatsappNumber = DEFAULT_WORKSHOP_DATA.whatsappNumber;
+    let acfWhatsappMessage = DEFAULT_WORKSHOP_DATA.whatsappMessage;
+    if (typeof acf.whatsapp === 'object' && acf.whatsapp !== null) {
+      if (acf.whatsapp.number) acfWhatsappNumber = String(acf.whatsapp.number);
+      if (acf.whatsapp.message) acfWhatsappMessage = String(acf.whatsapp.message);
+    } else if (typeof acf.whatsapp_number === 'string' && acf.whatsapp_number.trim()) {
+      acfWhatsappNumber = acf.whatsapp_number.trim();
+    } else if (typeof acf.whatsapp === 'string' && acf.whatsapp.trim()) {
+      acfWhatsappNumber = acf.whatsapp.trim();
+    }
+    if (typeof acf.whatsapp_message === 'string' && acf.whatsapp_message.trim()) {
+      acfWhatsappMessage = acf.whatsapp_message.trim();
+    }
+
+    const rawAcfHero = acf.hero_image || acf.heroImage;
+    const acfHeroImage =
+      typeof rawAcfHero === 'string' && rawAcfHero.trim() !== ''
+        ? rawAcfHero.trim()
+        : DEFAULT_WORKSHOP_DATA.heroImage;
+
     return {
       title: page.title?.rendered || DEFAULT_WORKSHOP_DATA.title,
       subtitle: acf.subtitle || DEFAULT_WORKSHOP_DATA.subtitle,
@@ -158,14 +199,14 @@ export async function getWorkshopDetails(): Promise<WorkshopData> {
       locationDetails: acf.location_details || DEFAULT_WORKSHOP_DATA.locationDetails,
       fees: Number(acf.fees || acf.fee || DEFAULT_WORKSHOP_DATA.fees),
       advanceFee: Number(acf.advance_fee || DEFAULT_WORKSHOP_DATA.advanceFee),
-      whatsappNumber: acf.whatsapp_number || DEFAULT_WORKSHOP_DATA.whatsappNumber,
-      whatsappMessage: acf.whatsapp_message || DEFAULT_WORKSHOP_DATA.whatsappMessage,
+      whatsappNumber: acfWhatsappNumber,
+      whatsappMessage: acfWhatsappMessage,
       highlights: Array.isArray(acf.highlights) && acf.highlights.length > 0
         ? acf.highlights
         : DEFAULT_WORKSHOP_DATA.highlights,
       patternsCount: acf.patterns_count || DEFAULT_WORKSHOP_DATA.patternsCount,
       seatsLeft: acf.seats_left !== undefined ? Number(acf.seats_left) : DEFAULT_WORKSHOP_DATA.seatsLeft,
-      heroImage: acf.hero_image || DEFAULT_WORKSHOP_DATA.heroImage,
+      heroImage: acfHeroImage,
       isFromWordPress: true,
     };
   } catch (error) {
@@ -341,13 +382,21 @@ export async function getGalleryPhotos(): Promise<GalleryPhoto[]> {
         }
       }
 
+      const validImageUrl =
+        typeof sourceUrl === 'string' && sourceUrl.trim() !== ''
+          ? sourceUrl.trim()
+          : CURATED_FALLBACK_PHOTOS[index % CURATED_FALLBACK_PHOTOS.length].imageUrl;
+
+      const safeTitle = (typeof displayTitle === 'string' && displayTitle.trim() !== '') ? displayTitle.trim() : 'गौरी महालक्ष्मी साडी ड्रॅपिंग फोटो';
+      const safeAltText = (typeof item.alt_text === 'string' && item.alt_text.trim() !== '') ? item.alt_text.trim() : safeTitle;
+
       return {
         id: item.id,
-        title: displayTitle,
-        subtitle: displaySubtitle,
-        imageUrl: sourceUrl,
+        title: safeTitle,
+        subtitle: displaySubtitle || 'पूजा साडी ड्रॅपिंग पुणे',
+        imageUrl: validImageUrl,
         category,
-        altText: item.alt_text || displayTitle,
+        altText: safeAltText,
         postId: item.post || undefined,
         date: item.date,
       };
@@ -643,3 +692,93 @@ export function getDrapingStyles(): DrapingStyleItem[] {
     },
   ];
 }
+
+/**
+ * Fetch Draping Styles dynamically from WordPress REST API
+ * (Falls back to default curated 14 styles if WordPress hasn't seeded them yet)
+ */
+export async function getDrapingStylesAsync(): Promise<DrapingStyleItem[]> {
+  try {
+    const res = await fetch(`${WP_URL}/wp-json/pooja/v1/styles`, {
+      headers: { Accept: 'application/json' },
+      next: { revalidate: 60 },
+    });
+    if (res.ok) {
+      const json = await res.json();
+      if (json?.data && Array.isArray(json.data) && json.data.length > 0) {
+        return json.data;
+      }
+    }
+  } catch (err) {
+    console.warn('Could not fetch styles from WordPress API, using defaults:', err);
+  }
+  return getDrapingStyles();
+}
+
+/**
+ * Fetch Workshop Batches dynamically from WordPress REST API
+ */
+export async function getBatchesAsync(): Promise<any[]> {
+  try {
+    const res = await fetch(`${WP_URL}/wp-json/pooja/v1/batches`, {
+      headers: { Accept: 'application/json' },
+      next: { revalidate: 60 },
+    });
+    if (res.ok) {
+      const json = await res.json();
+      if (json?.data && Array.isArray(json.data)) {
+        return json.data;
+      }
+    }
+  } catch (err) {
+    console.warn('Could not fetch batches from WordPress API:', err);
+  }
+  return [];
+}
+
+/**
+ * Fetch Student Reviews dynamically from WordPress REST API
+ */
+export async function getReviewsAsync(): Promise<any[]> {
+  try {
+    const res = await fetch(`${WP_URL}/wp-json/pooja/v1/reviews`, {
+      headers: { Accept: 'application/json' },
+      next: { revalidate: 60 },
+    });
+    if (res.ok) {
+      const json = await res.json();
+      if (json?.data && Array.isArray(json.data)) {
+        return json.data;
+      }
+    }
+  } catch (err) {
+    console.warn('Could not fetch reviews from WordPress API:', err);
+  }
+  return [];
+}
+
+/**
+ * Send inquiry / booking lead directly to WordPress Backend Admin Panel
+ */
+export async function submitInquiryToWordPress(lead: {
+  name: string;
+  phone: string;
+  workshopType?: string;
+  participants?: string;
+  message?: string;
+}): Promise<{ success: boolean; lead_id?: number; message?: string }> {
+  try {
+    const res = await fetch(`${WP_URL}/wp-json/pooja/v1/inquiry`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(lead),
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (err) {
+    console.warn('Could not submit inquiry to WordPress:', err);
+  }
+  return { success: false };
+}
+

@@ -64,23 +64,33 @@ export default function WordPressSyncBadge({ mediaCount = 8, isOnline = true }: 
               </div>
             </div>
 
-            <div className="pt-2 border-t border-stone-100 flex items-center justify-between">
-              <a
-                href="https://avipatil.live/cmspooja/wp-admin/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#581825] hover:bg-[#722031] text-amber-200 font-bold text-[11px] transition-colors"
-              >
-                <span>WP-Admin डॅशबोर्ड</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
+            <div className="pt-2 border-t border-stone-100 flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <a
+                  href="https://avipatil.live/cmspooja/wp-admin/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#581825] hover:bg-[#722031] text-amber-200 font-bold text-[11px] transition-colors"
+                >
+                  <span>WP-Admin डॅशबोर्ड</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
 
-              <button
-                onClick={() => setIsExpanded(false)}
-                className="text-stone-400 hover:text-stone-600 text-[11px]"
+                <button
+                  onClick={() => setIsExpanded(false)}
+                  className="text-stone-400 hover:text-stone-600 text-[11px]"
+                >
+                  बंद करा
+                </button>
+              </div>
+
+              <a
+                href="/api/download-plugin"
+                download="pooja-saree-draping-cms.php"
+                className="w-full text-center px-2 py-1 rounded bg-amber-100 hover:bg-amber-200 text-[#581825] font-bold text-[10px] transition-colors border border-amber-300"
               >
-                बंद करा
-              </button>
+                📥 WordPress CMS प्लगइन डाउनलोड करा (.php)
+              </a>
             </div>
           </div>
         )}

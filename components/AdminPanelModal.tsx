@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import Link from 'next/link';
 import {
   Lock,
   Unlock,
@@ -32,6 +33,9 @@ import {
   Clock,
   MapPin,
   HelpCircle,
+  BrainCircuit,
+  Bot,
+  ExternalLink,
 } from 'lucide-react';
 import businessData from '../data/business-data.json';
 import { WorkshopConfig } from './EditWorkshopModal';
@@ -107,7 +111,7 @@ export default function AdminPanelModal({ isOpen, onClose, onDataChanged }: Admi
   const [pinInput, setPinInput] = useState<string>('');
   const [pinError, setPinError] = useState<string>('');
   const [showPin, setShowPin] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<'gallery' | 'styles' | 'workshop' | 'leads' | 'backup'>('gallery');
+  const [activeTab, setActiveTab] = useState<'gallery' | 'styles' | 'workshop' | 'leads' | 'aicourse' | 'backup'>('gallery');
   const [toastMessage, setToastMessage] = useState<string>('');
 
   const showToast = (msg: string) => {
@@ -760,6 +764,23 @@ export default function AdminPanelModal({ isOpen, onClose, onDataChanged }: Admi
                 </button>
 
                 <button
+                  onClick={() => setActiveTab('aicourse')}
+                  className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                    activeTab === 'aicourse'
+                      ? 'bg-[#8B1E3F] text-white shadow-sm'
+                      : 'text-[#5B454A] hover:bg-gray-50'
+                  }`}
+                >
+                  <BrainCircuit className="w-4 h-4 shrink-0 text-amber-400" />
+                  <span>१ डे AI कोर्स CMS</span>
+                  <span className={`ml-auto text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                    activeTab === 'aicourse' ? 'bg-amber-400 text-stone-900' : 'bg-amber-100 text-amber-900'
+                  }`}>
+                    नवीन
+                  </span>
+                </button>
+
+                <button
                   onClick={() => setActiveTab('backup')}
                   className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
                     activeTab === 'backup'
@@ -847,7 +868,7 @@ export default function AdminPanelModal({ isOpen, onClose, onDataChanged }: Admi
                       >
                         <div className="relative h-44 w-full bg-gray-100 group">
                           <img
-                            src={item.image}
+                            src={item.image || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80'}
                             alt={item.title}
                             className="w-full h-full object-cover"
                           />
@@ -970,7 +991,7 @@ export default function AdminPanelModal({ isOpen, onClose, onDataChanged }: Admi
                         >
                           <div className="relative h-44 w-full bg-gray-100">
                             <img
-                              src={currentImg}
+                              src={currentImg || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80'}
                               alt={style.nameEnglish}
                               className="w-full h-full object-cover"
                             />
@@ -1404,6 +1425,137 @@ export default function AdminPanelModal({ isOpen, onClose, onDataChanged }: Admi
                   </div>
                 </div>
               )}
+
+              {/* AI COURSE CMS TAB */}
+              {activeTab === 'aicourse' && (
+                <div className="space-y-6 animate-fadeIn">
+                  <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-gray-200">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-lg font-bold font-serif text-[#3B1F25]">
+                          १ डे AI कार्यशाळा (AI Course CMS - Marathi & Hindi)
+                        </h3>
+                        <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 text-xs font-bold">
+                          नवीन टॅब
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        लहान व्यावसायिक, विद्यार्थी, पालक, गायक-संगीतकार, सोसायटी पदाधिकारी व मॅनेजर्ससाठी १ डे AI वर्कशॉप
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <Link
+                        href="/ai-course"
+                        target="_blank"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-900 text-xs font-bold shadow-sm transition-all"
+                      >
+                        <span>AI कोर्स पेज उघडा (Live Preview)</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Overview Stats Cards */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs">
+                      <div className="text-xs text-gray-500 font-semibold mb-1">माध्यम भाषा</div>
+                      <div className="text-base font-bold text-[#8B1E3F]">मराठी & हिंदी</div>
+                      <div className="text-[11px] text-gray-400">१००% सोपी बोलीभाषा</div>
+                    </div>
+                    <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs">
+                      <div className="text-xs text-gray-500 font-semibold mb-1">अभ्यासक्रम</div>
+                      <div className="text-base font-bold text-[#8B1E3F]">६ मॉड्यूल्स</div>
+                      <div className="text-[11px] text-gray-400">Basic to Advanced</div>
+                    </div>
+                    <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs">
+                      <div className="text-xs text-gray-500 font-semibold mb-1">लक्ष्य गट (Audience)</div>
+                      <div className="text-base font-bold text-[#8B1E3F]">१४+ ट्रॅक्स</div>
+                      <div className="text-[11px] text-gray-400">Business, Students, Society</div>
+                    </div>
+                    <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs">
+                      <div className="text-xs text-gray-500 font-semibold mb-1">वर्कशॉप फी</div>
+                      <div className="text-base font-bold text-emerald-700">₹१,४९९/-</div>
+                      <div className="text-[11px] text-gray-400">सर्टिफिकेट समाविष्ट</div>
+                    </div>
+                  </div>
+
+                  {/* AI Tools & Tracks Management Info */}
+                  <div className="bg-white rounded-2xl p-5 border border-gray-200 space-y-4">
+                    <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+                      <div className="flex items-center gap-2 text-sm font-bold text-[#3B1F25]">
+                        <Bot className="w-4 h-4 text-[#8B1E3F]" />
+                        <span>१ डे AI वर्कशॉप मुख्य ट्रॅक्स</span>
+                      </div>
+                      <span className="text-xs text-stone-500 font-medium">
+                        (वेबसाइटवरील /ai-course वर उपलब्ध)
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                      <div className="p-3 rounded-xl bg-[#FAF7F2] border border-[#EADBCE]">
+                        <div className="font-bold text-xs text-stone-900 mb-0.5">💼 लहान व्यावसायिक</div>
+                        <div className="text-[11px] text-stone-600">WhatsApp मार्केटिंग मेसेज, ऑफर्स, प्रॉडक्ट माहिती व जाहिराती</div>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-[#FAF7F2] border border-[#EADBCE]">
+                        <div className="font-bold text-xs text-stone-900 mb-0.5">🎓 विद्यार्थी & युवक</div>
+                        <div className="text-[11px] text-stone-600">अभ्यास नोट्स, परीक्षा तयारी, प्रोजेक्ट्स, रेझ्युमे व मुलाखत सराव</div>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-[#FAF7F2] border border-[#EADBCE]">
+                        <div className="font-bold text-xs text-stone-900 mb-0.5">🏢 सोसायटी चेअरमन / सेक्रेटरी</div>
+                        <div className="text-[11px] text-stone-600">नोटीस, AGM अजेंडा, मिनिट्स, मेंटेनन्स पत्रे व परिपत्रके</div>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-[#FAF7F2] border border-[#EADBCE]">
+                        <div className="font-bold text-xs text-stone-900 mb-0.5">👨‍👩‍👧 पालक</div>
+                        <div className="text-[11px] text-stone-600">मुलांचा अभ्यास, बोधकथा, शैक्षणिक खेळ व सुरक्षित वापर</div>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-[#FAF7F2] border border-[#EADBCE]">
+                        <div className="font-bold text-xs text-stone-900 mb-0.5">🎵 गायक, संगीतकार & कलाकार</div>
+                        <div className="text-[11px] text-stone-600">गाण्याचे बोल आयडियाज, YouTube टायटल्स, रील्स संकल्पना</div>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-[#FAF7F2] border border-[#EADBCE]">
+                        <div className="font-bold text-xs text-stone-900 mb-0.5">👔 मॅनेजर्स & लीडर्स</div>
+                        <div className="text-[11px] text-stone-600">ईमेल ड्राफ्टिंग, मीटिंग सारांश, SOP आणि टीम रिपोर्टिंग</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* WordPress Integration Help Notice */}
+                  <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-5">
+                    <div className="flex items-start gap-3">
+                      <Sparkles className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="text-xs sm:text-sm font-bold text-amber-900 mb-1">
+                          WordPress प्लगइनसाठी स्वतंत्र AI Course आर्किटेक्चर तयार आहे
+                        </h4>
+                        <p className="text-xs text-amber-800/90 leading-relaxed mb-3">
+                          या AI कोर्सचा संपूर्ण डेटा WordPress Backend (Headless CMS) द्वारे नियंत्रित करण्यासाठीचा मास्टर आर्किटेक्चर प्रॉम्ट व API ब्लूप्रिंट तयार केलेला आहे.
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          <Link
+                            href="/ai-course#register"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-stone-950 text-xs font-bold transition-colors"
+                          >
+                            <span>थेट नोंदणी फॉर्म पहा</span>
+                          </Link>
+                          <a
+                            href="/api/download-plugin"
+                            download="pooja-saree-draping-cms.php"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-amber-300 text-amber-950 text-xs font-bold hover:bg-amber-100 transition-colors"
+                          >
+                            <span>WordPress CMS प्लगइन डाऊनलोड करा</span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -1565,7 +1717,13 @@ export default function AdminPanelModal({ isOpen, onClose, onDataChanged }: Admi
                   onClick={() => editFileRef.current?.click()}
                   className="relative h-40 w-full rounded-xl overflow-hidden bg-gray-100 border border-gray-200 cursor-pointer"
                 >
-                  <img src={editImgUrl} alt="Preview" className="w-full h-full object-cover" />
+                  {editImgUrl ? (
+                    <img src={editImgUrl} alt="Preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-xs text-gray-500">
+                      फोटो निवडण्यासाठी क्लिक करा
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity text-white text-xs font-semibold">
                     नवीन फोटो निवडा
                   </div>

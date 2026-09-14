@@ -26,6 +26,7 @@ export default function Header({ onBookClick, onAdminClick }: HeaderProps) {
   const navItems = [
     { label: 'मुखपृष्ठ', href: '/' },
     { label: '१ डे वर्कशॉप', href: '/workshop' },
+    { label: 'AI कोर्स (नवीन)', href: '/ai-course', isSpecial: true },
     { label: 'फोटो गॅलरी', href: '/gallery' },
     { label: 'आमच्याबद्दल', href: '/about' },
     { label: 'संपर्क', href: '/contact' },
@@ -126,13 +127,16 @@ export default function Header({ onBookClick, onAdminClick }: HeaderProps) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all inline-flex items-center gap-1.5 ${
                     isActive
                       ? 'bg-amber-400/20 text-amber-300 font-semibold shadow-inner'
+                      : item.isSpecial
+                      ? 'text-amber-300 hover:text-amber-200 bg-amber-400/10 border border-amber-300/30 hover:bg-amber-400/20 font-semibold'
                       : 'text-[#F3E5E7] hover:text-amber-200 hover:bg-white/5'
                   }`}
                 >
-                  {item.label}
+                  {item.isSpecial && <Sparkles className="w-3.5 h-3.5 text-amber-300" />}
+                  <span>{item.label}</span>
                 </Link>
               );
             })}

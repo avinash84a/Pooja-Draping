@@ -29,10 +29,23 @@ export default function WorkshopSection({
   styles,
   onBookClick,
 }: WorkshopSectionProps) {
-  const whatsappUrl = `https://wa.me/91${workshopData.whatsappNumber || '8446917187'}?text=${encodeURIComponent(
-    workshopData.whatsappMessage || 'नमस्कार पूजा ताई, मला १ डे साडी ड्रॅपिंग वर्कशॉपसाठी नाव नोंदवायचे आहे.'
-  )}`;
+  const rawNum = workshopData?.whatsappNumber;
+  const whatsappNumber: string =
+    typeof rawNum === 'string' && rawNum.trim() !== ''
+      ? rawNum.trim()
+      : typeof rawNum === 'object' && rawNum !== null && 'number' in (rawNum as any)
+      ? String((rawNum as any).number)
+      : '8446917187';
 
+  const rawMsg = workshopData?.whatsappMessage;
+  const whatsappMessage: string =
+    typeof rawMsg === 'string' && rawMsg.trim() !== ''
+      ? rawMsg.trim()
+      : typeof rawMsg === 'object' && rawMsg !== null && 'message' in (rawMsg as any)
+      ? String((rawMsg as any).message)
+      : 'नमस्कार पूजा ताई, मला १ डे साडी ड्रॅपिंग वर्कशॉपसाठी नाव नोंदवायचे आहे.';
+
+  const whatsappUrl = `https://wa.me/91${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
   return (
     <section id="workshop" className="py-16 sm:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">

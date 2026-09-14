@@ -86,6 +86,12 @@ export default function Footer({ onAdminClick }: FooterProps) {
                 </Link>
               </li>
               <li>
+                <Link href="/ai-course" className="text-amber-300 hover:text-amber-200 font-semibold transition-colors flex items-center gap-1">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                  <span>१ डे AI कार्यशाळा (AI Course)</span>
+                </Link>
+              </li>
+              <li>
                 <Link href="/gallery" className="hover:text-amber-300 transition-colors">
                   फोटो गॅलरी (Gallery)
                 </Link>

@@ -460,7 +460,7 @@ export default function StudentGallerySection({ refreshKey, items: propItems }: 
               {/* Photo Container */}
               <div className="relative h-72 sm:h-80 w-full overflow-hidden bg-gray-100">
                 <img
-                  src={item.image}
+                  src={item.image || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80'}
                   alt={item.title}
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   referrerPolicy="no-referrer"
@@ -638,8 +638,8 @@ export default function StudentGallerySection({ refreshKey, items: propItems }: 
               className="relative max-w-4xl w-full max-h-[85vh] flex flex-col items-center justify-center"
             >
               <img
-                src={filteredGallery[selectedImageIndex]?.image}
-                alt={filteredGallery[selectedImageIndex]?.title}
+                src={filteredGallery[selectedImageIndex]?.image || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80'}
+                alt={filteredGallery[selectedImageIndex]?.title || 'गॅलरी फोटो'}
                 className="max-w-full max-h-[68vh] object-contain rounded-2xl shadow-2xl"
                 referrerPolicy="no-referrer"
               />
@@ -839,11 +839,17 @@ export default function StudentGallerySection({ refreshKey, items: propItems }: 
                     onClick={() => editFileInputRef.current?.click()}
                     className="relative h-44 w-full rounded-2xl overflow-hidden bg-gray-100 border-2 border-dashed border-[#EADBCE] hover:border-[#8B1E3F] cursor-pointer"
                   >
-                    <img
-                      src={editPreviewUrl}
-                      alt="Edit preview"
-                      className="w-full h-full object-cover"
-                    />
+                    {editPreviewUrl ? (
+                      <img
+                        src={editPreviewUrl}
+                        alt="Edit preview"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-xs text-stone-500">
+                        फोटो निवडण्यासाठी क्लिक करा
+                      </div>
+                    )}
                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity text-white text-xs font-semibold gap-1.5">
                       <Camera className="w-4 h-4" />
                       नवीन फोटो निवडा

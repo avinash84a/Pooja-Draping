@@ -11,9 +11,10 @@ import WhatsAppButton from '../components/WhatsAppButton';
 import WordPressSyncBadge from '../components/WordPressSyncBadge';
 import {
   getWorkshopDetails,
-  getDrapingStyles,
+  getDrapingStylesAsync,
   getGalleryPhotos,
   getMedia,
+  getReviewsAsync,
 } from '../lib/wordpress';
 import {
   Star,
@@ -26,8 +27,10 @@ import {
   Quote,
   Clock,
   MapPin,
+  Bot,
+  BrainCircuit,
+  ArrowRight,
 } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 
 export const revalidate = 60; // Next.js ISR (Incremental Static Regeneration every 60s)
@@ -44,15 +47,16 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [workshopData, styles, photos, mediaList] = await Promise.all([
+  const [workshopData, styles, photos, mediaList, wpReviews] = await Promise.all([
     getWorkshopDetails(),
-    getDrapingStyles(),
+    getDrapingStylesAsync(),
     getGalleryPhotos(),
     getMedia(50),
+    getReviewsAsync(),
   ]);
 
-  // Real Marathi reviews from verified students
-  const reviews = [
+  // Real Marathi reviews from verified students (with WordPress reviews prepended if available)
+  const fallbackReviews = [
     {
       name: 'स्नेहा कुलकर्णी (सिंहगड रोड, पुणे)',
       rating: 5,
@@ -78,6 +82,16 @@ export default async function HomePage() {
       date: 'ऑक्टोबर २०२४',
     },
   ];
+
+  const reviews = Array.isArray(wpReviews) && wpReviews.length > 0
+    ? wpReviews.map((r: any) => ({
+        name: r.city ? `${r.name} (${r.city})` : r.name,
+        rating: r.rating || 5,
+        comment: r.text || '',
+        style: 'साडी ड्रॅपिंग विद्यार्थिनी',
+        date: r.date || '२०२४',
+      }))
+    : fallbackReviews;
 
   return (
     <main className="min-h-screen bg-[#FAF7F2] flex flex-col justify-between selection:bg-[#8C1D40] selection:text-white">
@@ -202,7 +216,54 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 7. Booking CTA with Fee ₹1,500 & Advance ₹500 */}
+      {/* 7. New: Practical AI Course Banner with 5 Pillars & 10-12 Core Tools */}
+      <section className="py-12 bg-gradient-to-r from-[#4A121E] via-[#581825] to-[#36111B] text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white/10 rounded-3xl p-6 sm:p-10 border border-amber-400/30 backdrop-blur-md flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div className="space-y-3 max-w-2xl text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold border border-amber-300/30">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>नवीन: १ डे प्रॅक्टिकल AI कार्यशाळा (पुणे & ऑनलाइन)</span>
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-serif font-extrabold text-white">
+                AI फक्त IT लोकांसाठी नाही — <span className="text-amber-300">AI प्रत्येकासाठी आहे!</span>
+              </h2>
+              <p className="text-sm sm:text-base text-stone-200 leading-relaxed">
+                ४०–५० टूल्सचा गोंधळ नको! १०–१२ Core Tools, अभ्यासक्रमाचे ५ मुख्य Pillars (Understand, Communicate, Work, Create, Automate) आणि शेवटच्या क्लासमध्ये तुमच्या प्रोफेशननुसार थेट <strong className="text-amber-300">Real-Life Project Challenge</strong>.
+              </p>
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2 text-xs font-semibold text-amber-200">
+                <span className="flex items-center gap-1">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" /> ५ मुख्य Pillars
+                </span>
+                <span className="flex items-center gap-1">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" /> १०-१२ Core Tools (No Confusion)
+                </span>
+                <span className="flex items-center gap-1">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" /> शिक्षक, व्यावसायिक, पालक सर्वांसाठी
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0 w-full sm:w-auto">
+              <Link
+                href="/ai-course"
+                className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-stone-950 font-bold text-sm sm:text-base shadow-lg transition-all flex items-center justify-center gap-2"
+              >
+                <span>AI कोर्स सविस्तर पाहा</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                href="/ai-course#register"
+                className="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/25 text-white font-medium text-xs sm:text-sm text-center transition-all"
+              >
+                सीट बुक करा (₹१,४९९/-)
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. Booking CTA with Fee ₹1,500 & Advance ₹500 */}
       <BookingCTA workshopData={workshopData} />
 
       {/* 8. Contact Section: Sinhgad Road, Anand Nagar, Pune & Interactive form */}

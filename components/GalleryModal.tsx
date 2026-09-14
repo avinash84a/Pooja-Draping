@@ -39,8 +39,8 @@ export default function GalleryModal({ photo, onClose }: GalleryModalProps) {
         {/* Image Container */}
         <div className="relative w-full md:w-3/5 bg-black flex items-center justify-center min-h-[350px] md:min-h-[500px]">
           <Image
-            src={photo.imageUrl}
-            alt={photo.altText || photo.title}
+            src={photo.imageUrl || 'https://avipatil.live/cmspooja/wp-content/uploads/%E0%A4%97%E0%A5%8C%E0%A4%B0%E0%A5%80-%E0%A4%AE%E0%A4%B9%E0%A4%BE%E0%A4%B2%E0%A4%95%E0%A5%8D%E0%A4%AE%E0%A5%80/WhatsApp-Image-2026-09-07-at-12.32.19-AM.jpeg'}
+            alt={photo.altText?.trim() || photo.title?.trim() || 'पूजा साडी ड्रॅपिंग फोटो'}
             fill
             sizes="(max-width: 768px) 100vw, 60vw"
             className="object-contain p-2"

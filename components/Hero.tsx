@@ -12,13 +12,28 @@ interface HeroProps {
 }
 
 export default function Hero({ workshopData, onBookClick }: HeroProps) {
-  const whatsappUrl = `https://wa.me/91${workshopData.whatsappNumber || '8446917187'}?text=${encodeURIComponent(
-    workshopData.whatsappMessage || 'नमस्कार पूजा ताई, मला १ डे साडी ड्रॅपिंग वर्कशॉपसाठी नाव नोंदवायचे आहे.'
-  )}`;
+  const rawNum = workshopData?.whatsappNumber;
+  const whatsappNumber: string =
+    typeof rawNum === 'string' && rawNum.trim() !== ''
+      ? rawNum.trim()
+      : typeof rawNum === 'object' && rawNum !== null && 'number' in (rawNum as any)
+      ? String((rawNum as any).number)
+      : '8446917187';
+
+  const rawMsg = workshopData?.whatsappMessage;
+  const whatsappMessage: string =
+    typeof rawMsg === 'string' && rawMsg.trim() !== ''
+      ? rawMsg.trim()
+      : typeof rawMsg === 'object' && rawMsg !== null && 'message' in (rawMsg as any)
+      ? String((rawMsg as any).message)
+      : 'नमस्कार पूजा ताई, मला १ डे साडी ड्रॅपिंग वर्कशॉपसाठी नाव नोंदवायचे आहे.';
+
+  const whatsappUrl = `https://wa.me/91${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
   const heroImageSrc =
-    workshopData.heroImage ||
-    'https://avipatil.live/cmspooja/wp-content/uploads/%E0%A4%97%E0%A5%8C%E0%A4%B0%E0%A5%80-%E0%A4%AE%E0%A4%B9%E0%A4%BE%E0%A4%B2%E0%A4%95%E0%A5%8D%E0%A4%B7%E0%A5%8D%E0%A4%AE%E0%A5%80/WhatsApp-Image-2026-09-07-at-12.32.19-AM.jpeg';
+    typeof workshopData?.heroImage === 'string' && workshopData.heroImage.trim() !== ''
+      ? workshopData.heroImage.trim()
+      : 'https://avipatil.live/cmspooja/wp-content/uploads/%E0%A4%97%E0%A5%8C%E0%A4%B0%E0%A5%80-%E0%A4%AE%E0%A4%B9%E0%A4%BE%E0%A4%B2%E0%A4%95%E0%A5%8D%E0%A4%AE%E0%A5%80/WhatsApp-Image-2026-09-07-at-12.32.19-AM.jpeg';
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-[#FDFBF7] via-[#FAF5EE] to-[#F5EFE6] pt-8 pb-16 lg:pt-14 lg:pb-24">

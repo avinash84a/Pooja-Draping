@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import businessData from '../../../data/business-data.json';
+import { submitInquiryToWordPress } from '../../../lib/wordpress';
 
 const DATA_FILE_PATH = path.join(process.cwd(), 'data', 'site-data.json');
 
@@ -149,6 +150,16 @@ export async function POST(req: NextRequest) {
       adminPin: body.adminPin ? String(body.adminPin) : current.adminPin,
       updatedAt: new Date().toISOString(),
     };
+
+    if (body.newLead) {
+      submitInquiryToWordPress({
+        name: body.newLead.name,
+        phone: body.newLead.phone,
+        workshopType: body.newLead.workshopType,
+        participants: body.newLead.participants,
+        message: body.newLead.message,
+      }).catch((err) => console.warn('WordPress inquiry sync error:', err));
+    }
 
     const saved = writeSiteData(updated);
     if (!saved) {
