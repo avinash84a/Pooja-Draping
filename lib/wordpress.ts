@@ -100,6 +100,42 @@ export const DEFAULT_WORKSHOP_DATA: WorkshopData = {
  */
 export async function getWorkshopDetails(): Promise<WorkshopData> {
   try {
+    // 1. Try dedicated custom endpoint if plugin is active
+    try {
+      const customRes = await fetch(`${WP_URL}/wp-json/pooja/v1/workshop`, {
+        headers: { Accept: 'application/json' },
+        next: { revalidate: 60 },
+      });
+      if (customRes.ok) {
+        const json = await customRes.json();
+        if (json?.data && json.data.title) {
+          const d = json.data;
+          return {
+            title: d.title || DEFAULT_WORKSHOP_DATA.title,
+            subtitle: d.subtitle || DEFAULT_WORKSHOP_DATA.subtitle,
+            instructor: d.instructor || 'पूजा पाटील',
+            description: d.description || DEFAULT_WORKSHOP_DATA.description,
+            date: d.date || DEFAULT_WORKSHOP_DATA.date,
+            time: d.time || DEFAULT_WORKSHOP_DATA.time,
+            location: d.location || DEFAULT_WORKSHOP_DATA.location,
+            locationDetails: d.location_details || DEFAULT_WORKSHOP_DATA.locationDetails,
+            fees: Number(d.fees || DEFAULT_WORKSHOP_DATA.fees),
+            advanceFee: Number(d.advance_fee || DEFAULT_WORKSHOP_DATA.advanceFee),
+            whatsappNumber: d.whatsapp_number || DEFAULT_WORKSHOP_DATA.whatsappNumber,
+            whatsappMessage: d.whatsapp_message || DEFAULT_WORKSHOP_DATA.whatsappMessage,
+            highlights: Array.isArray(d.highlights) && d.highlights.length > 0 ? d.highlights : DEFAULT_WORKSHOP_DATA.highlights,
+            patternsCount: d.patterns_count || DEFAULT_WORKSHOP_DATA.patternsCount,
+            seatsLeft: d.seats_left !== undefined ? Number(d.seats_left) : DEFAULT_WORKSHOP_DATA.seatsLeft,
+            heroImage: d.hero_image || DEFAULT_WORKSHOP_DATA.heroImage,
+            isFromWordPress: true,
+          };
+        }
+      }
+    } catch {
+      // Continue to fallback
+    }
+
+    // 2. Try standard WordPress page with slug 'workshop'
     const page = await getPageBySlug('workshop');
     if (!page) {
       return DEFAULT_WORKSHOP_DATA;
