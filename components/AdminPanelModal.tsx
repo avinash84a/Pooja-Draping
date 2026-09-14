@@ -42,7 +42,15 @@ import {
   saveGalleryAsync,
   compressImageFile,
   getInitialStyles,
+  loadStylesAsync,
   saveStylesAsync,
+  getInitialWorkshopConfig,
+  loadWorkshopConfigAsync,
+  saveWorkshopConfigAsync,
+  getInitialLeads,
+  loadLeadsAsync,
+  saveLeadsAsync,
+  loadFullSiteDataAsync,
 } from '../lib/galleryStorage';
 
 export type { GalleryItem };
@@ -146,12 +154,26 @@ export default function AdminPanelModal({ isOpen, onClose, onDataChanged }: Admi
   };
 
   // -------------------------------------------------------------
-  // 1. GALLERY STATE & HANDLERS
+  // 1. TOP-LEVEL CMS STATES
   // -------------------------------------------------------------
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(() => getInitialGallery());
   const [gallerySearch, setGallerySearch] = useState<string>('');
   const [galleryCategory, setGalleryCategory] = useState<string>('all');
   
+  const [styleImages, setStyleImages] = useState<Record<number, string>>(() => getInitialStyles());
+  const [styleSearch, setStyleSearch] = useState<string>('');
+  const [editingStyleId, setEditingStyleId] = useState<number | null>(null);
+  const styleImageFileRef = useRef<HTMLInputElement | null>(null);
+
+  const [workshopConfig, setWorkshopConfig] = useState<WorkshopConfig>(() => getInitialWorkshopConfig());
+
+  const [leads, setLeads] = useState<BookingLead[]>(() => getInitialLeads());
+  const [isManualLeadOpen, setIsManualLeadOpen] = useState(false);
+  const [manualName, setManualName] = useState('');
+  const [manualPhone, setManualPhone] = useState('');
+  const [manualWorkshop, setManualWorkshop] = useState('1 डे साडी ड्रॅपिंग वर्कशॉप');
+  const [manualNote, setManualNote] = useState('');
+
   // Gallery modals
   const [isAddPhotoOpen, setIsAddPhotoOpen] = useState(false);
   const [addTitle, setAddTitle] = useState('');
@@ -171,12 +193,15 @@ export default function AdminPanelModal({ isOpen, onClose, onDataChanged }: Admi
   const [replacingItem, setReplacingItem] = useState<GalleryItem | null>(null);
   const replaceFileRef = useRef<HTMLInputElement | null>(null);
 
-  // Sync latest gallery data when modal is opened
+  // Sync latest site data when modal is opened
   useEffect(() => {
     if (isOpen) {
-      loadGalleryAsync().then((items) => {
-        if (items && items.length > 0) {
-          setGalleryItems(items);
+      loadFullSiteDataAsync().then((data) => {
+        if (data) {
+          if (data.galleryItems && data.galleryItems.length > 0) setGalleryItems(data.galleryItems);
+          if (data.styleImages) setStyleImages(data.styleImages);
+          if (data.workshopConfig) setWorkshopConfig(data.workshopConfig);
+          if (data.leads) setLeads(data.leads);
         }
       });
     }
@@ -293,11 +318,6 @@ export default function AdminPanelModal({ isOpen, onClose, onDataChanged }: Admi
   // -------------------------------------------------------------
   // 2. STYLES STATE & HANDLERS
   // -------------------------------------------------------------
-  const [styleImages, setStyleImages] = useState<Record<number, string>>(() => getInitialStyles());
-  const [styleSearch, setStyleSearch] = useState<string>('');
-  const [editingStyleId, setEditingStyleId] = useState<number | null>(null);
-  const styleImageFileRef = useRef<HTMLInputElement | null>(null);
-
   const handleStylePhotoChange = async (styleId: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -337,16 +357,6 @@ export default function AdminPanelModal({ isOpen, onClose, onDataChanged }: Admi
   // -------------------------------------------------------------
   // 3. WORKSHOP CONFIG STATE & HANDLERS
   // -------------------------------------------------------------
-  const [workshopConfig, setWorkshopConfig] = useState<WorkshopConfig>(() => {
-    if (typeof window === 'undefined') return DEFAULT_WORKSHOP_CONFIG;
-    try {
-      const saved = localStorage.getItem('pooja_workshop_config');
-      return saved ? JSON.parse(saved) : DEFAULT_WORKSHOP_CONFIG;
-    } catch {
-      return DEFAULT_WORKSHOP_CONFIG;
-    }
-  });
-
   const loadWorkshopConfig = () => {
     try {
       const saved = localStorage.getItem('pooja_workshop_config');
@@ -360,68 +370,32 @@ export default function AdminPanelModal({ isOpen, onClose, onDataChanged }: Admi
     setWorkshopConfig(DEFAULT_WORKSHOP_CONFIG);
   };
 
-  const handleSaveWorkshopConfig = (e: React.FormEvent) => {
+  const handleSaveWorkshopConfig = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      localStorage.setItem('pooja_workshop_config', JSON.stringify(workshopConfig));
-    } catch {
-      // ignore
-    }
+    await saveWorkshopConfigAsync(workshopConfig);
     if (onDataChanged) onDataChanged();
-    window.dispatchEvent(new Event('pooja_workshop_updated'));
-    showToast('वर्कशॉप तपशील आणि फी यशस्वीरित्या सेव्ह झाले! 📅');
+    showToast('वर्कशॉप तपशील आणि फी यशस्वीरित्या सेव्ह झाले! वेबसाईटवर थेट अपडेट झाले आहे. 📅');
   };
 
-  const handleResetWorkshopConfig = () => {
+  const handleResetWorkshopConfig = async () => {
     setWorkshopConfig(DEFAULT_WORKSHOP_CONFIG);
-    try {
-      localStorage.setItem('pooja_workshop_config', JSON.stringify(DEFAULT_WORKSHOP_CONFIG));
-    } catch {
-      // ignore
-    }
+    await saveWorkshopConfigAsync(DEFAULT_WORKSHOP_CONFIG);
     if (onDataChanged) onDataChanged();
-    window.dispatchEvent(new Event('pooja_workshop_updated'));
     showToast('मूळ वर्कशॉप माहिती पूर्ववत झाली! 🔄');
   };
 
   // -------------------------------------------------------------
   // 4. BOOKINGS / LEADS STATE & HANDLERS
   // -------------------------------------------------------------
-  const [leads, setLeads] = useState<BookingLead[]>(() => {
-    if (typeof window === 'undefined') return [];
-    try {
-      const saved = localStorage.getItem('pooja_workshop_bookings');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-  const [isManualLeadOpen, setIsManualLeadOpen] = useState(false);
-  const [manualName, setManualName] = useState('');
-  const [manualPhone, setManualPhone] = useState('');
-  const [manualWorkshop, setManualWorkshop] = useState('1 डे साडी ड्रॅपिंग वर्कशॉप');
-  const [manualNote, setManualNote] = useState('');
-
   const loadLeads = () => {
-    try {
-      const saved = localStorage.getItem('pooja_workshop_bookings');
-      if (saved) {
-        setLeads(JSON.parse(saved));
-        return;
-      }
-    } catch {
-      // ignore
-    }
-    setLeads([]);
+    loadLeadsAsync().then((fetched) => {
+      if (fetched) setLeads(fetched);
+    });
   };
 
-  const saveLeads = (newLeads: BookingLead[]) => {
+  const saveLeads = async (newLeads: BookingLead[]) => {
     setLeads(newLeads);
-    try {
-      localStorage.setItem('pooja_workshop_bookings', JSON.stringify(newLeads));
-    } catch {
-      // ignore
-    }
+    await saveLeadsAsync(newLeads);
   };
 
   useEffect(() => {

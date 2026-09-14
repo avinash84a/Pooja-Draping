@@ -11,6 +11,7 @@ import {
   Users,
   ShieldCheck,
 } from 'lucide-react';
+import { addLeadAsync, BookingLead } from '../lib/galleryStorage';
 
 interface BookingSectionProps {
   preselectedStyle?: string;
@@ -39,27 +40,21 @@ export default function BookingSection({ preselectedStyle }: BookingSectionProps
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
 
-    // Save registration to local bookings lead storage for Admin Panel
-    try {
-      const existingLeads = localStorage.getItem('pooja_workshop_bookings');
-      const leadsList = existingLeads ? JSON.parse(existingLeads) : [];
-      const newLead = {
-        id: `lead-${Date.now()}`,
-        name: formData.name.trim(),
-        phone: formData.phone.trim(),
-        workshopType: formData.workshopType,
-        participants: formData.participants,
-        message: formData.message.trim(),
-        date: new Date().toLocaleString('mr-IN', {
-          dateStyle: 'medium',
-          timeStyle: 'short',
-        }),
-        status: 'new',
-      };
-      localStorage.setItem('pooja_workshop_bookings', JSON.stringify([newLead, ...leadsList]));
-    } catch {
-      // ignore
-    }
+    // Save registration to local & server storage for Admin Panel
+    const newLead: BookingLead = {
+      id: `lead-${Date.now()}`,
+      name: formData.name.trim(),
+      phone: formData.phone.trim(),
+      workshopType: formData.workshopType,
+      participants: formData.participants,
+      message: formData.message.trim(),
+      date: new Date().toLocaleString('mr-IN', {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+      }),
+      status: 'new',
+    };
+    addLeadAsync(newLead).catch((err) => console.warn('Could not save lead:', err));
 
     // Create customized WhatsApp booking message
     const waText = `नमस्कार पूजा मॅडम,\n\nमी वर्कशॉपसाठी नावनोंदणी करू इच्छिते:\n- नाव: ${formData.name}\n- मोबाईल: ${formData.phone}\n- वर्कशॉप प्रकार: ${formData.workshopType}\n- सहभागी संख्या: ${formData.participants}\n${formData.message ? `- संदेश: ${formData.message}\n` : ''}\nकृपया पुढील बॅचची कन्फर्मेशन द्या. धन्यवाद!`;

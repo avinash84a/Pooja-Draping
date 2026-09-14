@@ -17,6 +17,16 @@ import Footer from '../components/Footer';
 import FloatingMobileCTA from '../components/FloatingMobileCTA';
 import AdminPanelModal from '../components/AdminPanelModal';
 import { ShieldCheck } from 'lucide-react';
+import {
+  loadFullSiteDataAsync,
+  getInitialWorkshopConfig,
+  getInitialGallery,
+  getInitialStyles,
+  getInitialLeads,
+  WorkshopConfig,
+  GalleryItem,
+  BookingLead,
+} from '../lib/galleryStorage';
 
 export default function Home() {
   const [preselectedStyle, setPreselectedStyle] = useState<string | undefined>();
@@ -24,9 +34,67 @@ export default function Home() {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [dataRefreshKey, setDataRefreshKey] = useState(0);
 
+  // Central site data state (Double-layer protection for instant reactivity)
+  const [siteData, setSiteData] = useState<{
+    workshopConfig: WorkshopConfig;
+    galleryItems: GalleryItem[];
+    styleImages: Record<string | number, string>;
+    leads: BookingLead[];
+  }>({
+    workshopConfig: getInitialWorkshopConfig(),
+    galleryItems: getInitialGallery(),
+    styleImages: getInitialStyles(),
+    leads: getInitialLeads(),
+  });
+
+  const refreshSiteData = async () => {
+    try {
+      const data = await loadFullSiteDataAsync();
+      if (data) {
+        setSiteData(data);
+      }
+    } catch (err) {
+      console.warn('Could not refresh full site data:', err);
+    }
+  };
+
   const handleDataChanged = () => {
     setDataRefreshKey((prev) => prev + 1);
+    refreshSiteData();
   };
+
+  // Initial load & real-time sync listeners
+  useEffect(() => {
+    let isMounted = true;
+    loadFullSiteDataAsync().then((data) => {
+      if (isMounted && data) {
+        setSiteData(data);
+      }
+    });
+
+    const handleUpdate = () => {
+      loadFullSiteDataAsync().then((data) => {
+        if (isMounted && data) {
+          setSiteData(data);
+        }
+      });
+    };
+
+    window.addEventListener('pooja_gallery_updated', handleUpdate);
+    window.addEventListener('pooja_styles_updated', handleUpdate);
+    window.addEventListener('pooja_workshop_updated', handleUpdate);
+    window.addEventListener('pooja_leads_updated', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener('pooja_gallery_updated', handleUpdate);
+      window.removeEventListener('pooja_styles_updated', handleUpdate);
+      window.removeEventListener('pooja_workshop_updated', handleUpdate);
+      window.removeEventListener('pooja_leads_updated', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+    };
+  }, []);
 
   useEffect(() => {
     const checkAdmin = () => {
@@ -68,16 +136,27 @@ export default function Home() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <HeroSection onBookClick={() => scrollToBooking()} />
+        <HeroSection
+          onBookClick={() => scrollToBooking()}
+          workshopConfig={siteData.workshopConfig}
+        />
 
         {/* About Section */}
         <AboutSection onExploreStylesClick={scrollToStyles} />
 
         {/* 1-Day Workshop Section with Editable Fields */}
-        <WorkshopSection refreshKey={dataRefreshKey} onBookClick={() => scrollToBooking()} />
+        <WorkshopSection
+          config={siteData.workshopConfig}
+          refreshKey={dataRefreshKey}
+          onBookClick={() => scrollToBooking()}
+        />
 
         {/* 14+ Saree Draping Styles Showcase */}
-        <StylesSection refreshKey={dataRefreshKey} onBookClick={(styleName) => scrollToBooking(styleName)} />
+        <StylesSection
+          customImages={siteData.styleImages}
+          refreshKey={dataRefreshKey}
+          onBookClick={(styleName) => scrollToBooking(styleName)}
+        />
 
         {/* Why Learn From Pooja? */}
         <WhyChooseSection />
@@ -86,7 +165,10 @@ export default function Home() {
         <TestimonialsSection />
 
         {/* Student Gallery & Workshop Moments */}
-        <StudentGallerySection refreshKey={dataRefreshKey} />
+        <StudentGallerySection
+          items={siteData.galleryItems}
+          refreshKey={dataRefreshKey}
+        />
 
         {/* 6-Step Workshop Learning Roadmap */}
         <WorkshopProcessSection />

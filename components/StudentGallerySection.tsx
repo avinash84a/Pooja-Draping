@@ -37,19 +37,21 @@ const CATEGORY_OPTIONS = [
 
 export interface StudentGallerySectionProps {
   refreshKey?: number;
+  items?: GalleryItem[];
 }
 
-export default function StudentGallerySection({ refreshKey }: StudentGallerySectionProps = {}) {
+export default function StudentGallerySection({ refreshKey, items: propItems }: StudentGallerySectionProps = {}) {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [toastMessage, setToastMessage] = useState<string>('');
 
-  // Main gallery items state with robust dual-layer persistence
-  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(() => getInitialGallery());
+  // Main gallery items state with robust multi-tier persistence
+  const [localGalleryItems, setLocalGalleryItems] = useState<GalleryItem[]>(() => getInitialGallery());
+  const galleryItems = (propItems && propItems.length > 0) ? propItems : localGalleryItems;
 
   // Helper to persist gallery items
   const persistGallery = async (items: GalleryItem[]) => {
-    setGalleryItems(items);
+    setLocalGalleryItems(items);
     await saveGalleryAsync(items);
   };
 
@@ -65,18 +67,18 @@ export default function StudentGallerySection({ refreshKey }: StudentGallerySect
     // Asynchronously fetch latest data from IndexedDB / Storage
     loadGalleryAsync().then((items) => {
       if (items && items.length > 0) {
-        setGalleryItems(items);
+        setLocalGalleryItems(items);
       }
     });
 
     const handleSync = (e?: Event) => {
       if (e instanceof CustomEvent && e.detail && Array.isArray(e.detail)) {
-        setGalleryItems(e.detail);
+        setLocalGalleryItems(e.detail);
         return;
       }
       loadGalleryAsync().then((items) => {
         if (items && items.length > 0) {
-          setGalleryItems(items);
+          setLocalGalleryItems(items);
         }
       });
     };

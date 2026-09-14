@@ -14,50 +14,42 @@ import {
   Users,
   Award,
 } from 'lucide-react';
-import EditWorkshopModal, { WorkshopConfig } from './EditWorkshopModal';
+import EditWorkshopModal from './EditWorkshopModal';
+import {
+  WorkshopConfig,
+  DEFAULT_WORKSHOP_CONFIG,
+  getInitialWorkshopConfig,
+  loadWorkshopConfigAsync,
+  saveWorkshopConfigAsync,
+} from '../lib/galleryStorage';
 
 interface WorkshopSectionProps {
   onBookClick: () => void;
   refreshKey?: number;
+  config?: WorkshopConfig;
 }
 
-const DEFAULT_WORKSHOP_CONFIG: WorkshopConfig = {
-  title: '1 डे साडी ड्रॅपिंग वर्कशॉप',
-  instructor: 'पूजा पाटील',
-  training: 'गौरी महालक्ष्मीच्या 14 ते 15 सुंदर साडी ड्रॅपिंग प्रकारांचे प्रात्यक्षिकासह प्रशिक्षण',
-  suitableFor: 'उभारलेल्या तसेच बसलेल्या गौरीसाठी आणि सणांसारख्या विशेष प्रसंगांसाठी',
-  nextDate: 'आगामी शनिवार / रविवार (Upcoming Weekend)',
-  time: 'सकाळी 10:30 ते संध्याकाळी 5:30 (पूर्ण 1 दिवस)',
-  fee: '₹1,999/- फक्त',
-  seatsLeft: 'फक्त 8 ते 10 जागा (वैयक्तिक लक्ष देण्यासाठी मर्यादित बॅच)',
-  venue: 'साईप्रभा हाऊस, जगताप हॉस्पिटल समोर, सिंहगड रोड, आनंद नगर, पुणे - 411051',
-};
-
-export default function WorkshopSection({ onBookClick, refreshKey }: WorkshopSectionProps) {
-  const [config, setConfig] = useState<WorkshopConfig>(() => {
-    if (typeof window === 'undefined') return DEFAULT_WORKSHOP_CONFIG;
-    try {
-      const saved = localStorage.getItem('pooja_workshop_config');
-      return saved ? JSON.parse(saved) : DEFAULT_WORKSHOP_CONFIG;
-    } catch {
-      return DEFAULT_WORKSHOP_CONFIG;
-    }
-  });
+export default function WorkshopSection({ onBookClick, refreshKey, config: propConfig }: WorkshopSectionProps) {
+  const [localConfig, setLocalConfig] = useState<WorkshopConfig>(() => getInitialWorkshopConfig());
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
+  const config = propConfig || localConfig;
+
   useEffect(() => {
-    const handleConfigUpdate = () => {
-      try {
-        const saved = localStorage.getItem('pooja_workshop_config');
-        if (saved) {
-          setConfig(JSON.parse(saved));
-        }
-      } catch {
-        // ignore
+    const handleConfigUpdate = (e?: Event) => {
+      if (e instanceof CustomEvent && e.detail && typeof e.detail === 'object') {
+        setLocalConfig((prev) => ({ ...prev, ...e.detail }));
+        return;
       }
+      loadWorkshopConfigAsync().then((c) => {
+        if (c) setLocalConfig(c);
+      });
     };
 
-    handleConfigUpdate();
+    loadWorkshopConfigAsync().then((c) => {
+      if (c) setLocalConfig(c);
+    });
+
     window.addEventListener('pooja_workshop_updated', handleConfigUpdate);
     window.addEventListener('storage', handleConfigUpdate);
     return () => {
@@ -66,14 +58,9 @@ export default function WorkshopSection({ onBookClick, refreshKey }: WorkshopSec
     };
   }, [refreshKey]);
 
-  const handleSaveConfig = (newConfig: WorkshopConfig) => {
-    setConfig(newConfig);
-    try {
-      localStorage.setItem('pooja_workshop_config', JSON.stringify(newConfig));
-    } catch {
-      // ignore
-    }
-    window.dispatchEvent(new Event('pooja_workshop_updated'));
+  const handleSaveConfig = async (newConfig: WorkshopConfig) => {
+    setLocalConfig(newConfig);
+    await saveWorkshopConfigAsync(newConfig);
   };
 
   const keyHighlights = [

@@ -21,30 +21,43 @@ import businessData from '../data/business-data.json';
 import {
   compressImageFile,
   getInitialStyles,
+  loadStylesAsync,
   saveStylesAsync,
 } from '../lib/galleryStorage';
 
 interface StylesSectionProps {
   onBookClick: (styleName?: string) => void;
   refreshKey?: number;
+  customImages?: Record<string | number, string>;
 }
 
-export default function StylesSection({ onBookClick, refreshKey }: StylesSectionProps) {
+export default function StylesSection({ onBookClick, refreshKey, customImages: propCustomImages }: StylesSectionProps) {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedStyle, setSelectedStyle] = useState<any | null>(null);
 
-  // Custom Images state with localStorage persistence
-  const [customImages, setCustomImages] = useState<Record<number, string>>(() => getInitialStyles());
+  // Custom Images state with server & IndexedDB persistence
+  const [localCustomImages, setLocalCustomImages] = useState<Record<string | number, string>>(() => getInitialStyles());
+
+  const customImages = propCustomImages || localCustomImages;
 
   useEffect(() => {
     const handleSync = (e?: Event) => {
-      if (e && (e as CustomEvent).detail?.styles) {
-        setCustomImages((e as CustomEvent).detail.styles);
-        return;
+      if (e instanceof CustomEvent && e.detail) {
+        const stylesPayload = (e.detail as any).styles || e.detail;
+        if (stylesPayload && typeof stylesPayload === 'object') {
+          setLocalCustomImages((prev) => ({ ...prev, ...stylesPayload }));
+          return;
+        }
       }
-      setCustomImages(getInitialStyles());
+      loadStylesAsync().then((s) => {
+        if (s) setLocalCustomImages(s);
+      });
     };
+
+    loadStylesAsync().then((s) => {
+      if (s) setLocalCustomImages(s);
+    });
 
     window.addEventListener('pooja_styles_updated', handleSync);
     window.addEventListener('storage', handleSync);
@@ -110,7 +123,7 @@ export default function StylesSection({ onBookClick, refreshKey }: StylesSection
         ...customImages,
         [editingPhotoStyle.id]: photoPreview,
       };
-      setCustomImages(updated);
+      setLocalCustomImages(updated);
       await saveStylesAsync(updated);
 
       // Also update selectedStyle if open
@@ -131,7 +144,7 @@ export default function StylesSection({ onBookClick, refreshKey }: StylesSection
     if (!editingPhotoStyle) return;
     const updated = { ...customImages };
     delete updated[editingPhotoStyle.id];
-    setCustomImages(updated);
+    setLocalCustomImages(updated);
     await saveStylesAsync(updated);
     if (selectedStyle && selectedStyle.id === editingPhotoStyle.id) {
       setSelectedStyle({

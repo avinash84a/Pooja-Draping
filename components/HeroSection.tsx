@@ -2,12 +2,14 @@
 
 import React from 'react';
 import { Star, MessageCircle, Calendar, Sparkles, CheckCircle2, ShieldCheck, MapPin } from 'lucide-react';
+import { WorkshopConfig } from '../lib/galleryStorage';
 
 interface HeroSectionProps {
   onBookClick: () => void;
+  workshopConfig?: WorkshopConfig;
 }
 
-export default function HeroSection({ onBookClick }: HeroSectionProps) {
+export default function HeroSection({ onBookClick, workshopConfig }: HeroSectionProps) {
   return (
     <section id="home" className="relative overflow-hidden bg-gradient-to-b from-[#F7F2EB] via-[#FAF7F2] to-[#FAF7F2] pt-8 pb-16 lg:pt-14 lg:pb-24">
       {/* Decorative Traditional Subtle Flourish */}
@@ -101,7 +103,7 @@ export default function HeroSection({ onBookClick }: HeroSectionProps) {
             {/* Location highlight badge */}
             <div className="mt-6 flex items-center gap-2 text-xs text-[#6B5358]">
               <MapPin className="w-3.5 h-3.5 text-[#8B1E3F]" />
-              <span>स्टुडिओ: सिंहगड रोड, आनंद नगर, पुणे (Opp. जगताप हॉस्पिटल)</span>
+              <span>{workshopConfig?.venue ? `स्टुडिओ: ${workshopConfig.venue}` : 'स्टुडिओ: सिंहगड रोड, आनंद नगर, पुणे (Opp. जगताप हॉस्पिटल)'}</span>
             </div>
           </div>
 
@@ -128,10 +130,10 @@ export default function HeroSection({ onBookClick }: HeroSectionProps) {
                     गौरी महालक्ष्मी स्पेशल
                   </div>
                   <h3 className="text-lg sm:text-xl font-bold font-serif leading-snug text-white drop-shadow">
-                    1 डे सखोल साडी ड्रॅपिंग वर्कशॉप
+                    {workshopConfig?.title || '1 डे सखोल साडी ड्रॅपिंग वर्कशॉप'}
                   </h3>
-                  <p className="text-xs text-amber-100/90 mt-1">
-                    उभारलेल्या व बसलेल्या गौरीचे 14+ पारंपारिक प्रकार
+                  <p className="text-xs text-amber-100/90 mt-1 line-clamp-2">
+                    {workshopConfig?.training || 'उभारलेल्या व बसलेल्या गौरीचे 14+ पारंपारिक प्रकार'}
                   </p>
                 </div>
               </div>
