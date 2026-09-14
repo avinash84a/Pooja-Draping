@@ -20,7 +20,7 @@ export default function BookingSection({ preselectedStyle }: BookingSectionProps
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
-    workshopType: preselectedStyle ? `स्पेशल: ${preselectedStyle}` : '1 डे साडी ड्रॅपिंग वर्कशॉप (गौरी महालक्ष्मी स्पेशल)',
+    workshopType: preselectedStyle ? `स्पेशल प्रकार: ${preselectedStyle}` : '1 डे साडी ड्रॅपिंग वर्कशॉप (गौरी महालक्ष्मी स्पेशल)',
     participants: '1',
     message: '',
   });
@@ -38,6 +38,28 @@ export default function BookingSection({ preselectedStyle }: BookingSectionProps
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
+
+    // Save registration to local bookings lead storage for Admin Panel
+    try {
+      const existingLeads = localStorage.getItem('pooja_workshop_bookings');
+      const leadsList = existingLeads ? JSON.parse(existingLeads) : [];
+      const newLead = {
+        id: `lead-${Date.now()}`,
+        name: formData.name.trim(),
+        phone: formData.phone.trim(),
+        workshopType: formData.workshopType,
+        participants: formData.participants,
+        message: formData.message.trim(),
+        date: new Date().toLocaleString('mr-IN', {
+          dateStyle: 'medium',
+          timeStyle: 'short',
+        }),
+        status: 'new',
+      };
+      localStorage.setItem('pooja_workshop_bookings', JSON.stringify([newLead, ...leadsList]));
+    } catch {
+      // ignore
+    }
 
     // Create customized WhatsApp booking message
     const waText = `नमस्कार पूजा मॅडम,\n\nमी वर्कशॉपसाठी नावनोंदणी करू इच्छिते:\n- नाव: ${formData.name}\n- मोबाईल: ${formData.phone}\n- वर्कशॉप प्रकार: ${formData.workshopType}\n- सहभागी संख्या: ${formData.participants}\n${formData.message ? `- संदेश: ${formData.message}\n` : ''}\nकृपया पुढील बॅचची कन्फर्मेशन द्या. धन्यवाद!`;

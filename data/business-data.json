@@ -55,117 +55,192 @@
       "nameMarathi": "उभारलेले गौरी पॅटर्न",
       "nameEnglish": "Standing Gauri Pattern",
       "category": "Gauri Mahalakshmi",
-      "desc": "उभारलेल्या गौरी मूर्तीसाठी अत्यंत मोहक, भव्य आणि पारंपरिक पद्धतीने नेसवलेला साडी पॅटर्न.",
+      "desc": "उभारलेल्या गौरी मूर्तीसाठी अत्यंत मोहक, भव्य आणि पारंपरिक पद्धतीने नेसवलेला साडी पॅटर्न. मूर्तीची उंची आणि तोल सांभाळून साडी कशी घट्ट बसवावी याचे प्रत्यक्ष प्रशिक्षण.",
       "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80",
-      "accent": "पारंपरिक भव्यता"
+      "accent": "पारंपरिक भव्यता",
+      "fabric": "सिल्क / पैठणी साडी",
+      "occasion": "गौरी महालक्ष्मी सण",
+      "difficulty": "प्रॅक्टिकल तंत्र"
     },
     {
       "id": 2,
       "nameMarathi": "बसलेले गौरी पॅटर्न",
       "nameEnglish": "Seated Gauri Pattern",
       "category": "Gauri Mahalakshmi",
-      "desc": "बसलेल्या गौरीसाठी व्यवस्थित बसणारा, न घसरणारा आणि उठावदार प्लेट्स असलेला मनमोहक पॅटर्न.",
+      "desc": "बसलेल्या गौरीसाठी व्यवस्थित बसणारा, अजिबात न घसरणारा आणि समोरून सुरेख प्लीट्स दिसणारा मनमोहक पारंपरिक प्रकार.",
       "image": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80",
-      "accent": "अचूक बैठक व प्लीट्स"
+      "accent": "अचूक बैठक व प्लीट्स",
+      "fabric": "काठपदर / ब्रोकेड साडी",
+      "occasion": "गौरी पूजन",
+      "difficulty": "स्टेप-बाय-स्टेप"
     },
     {
       "id": 3,
       "nameMarathi": "रुक्मिणी पॅटर्न",
-      "nameEnglish": "Rukmini Pattern",
-      "category": "Traditional Divine",
-      "desc": "वारकरी संप्रदाय आणि विठू-रुक्मिणीच्या सात्त्विक सौंदर्याची अनुभूती देणारा सात्विक पारंपरिक पदर पॅटर्न.",
+      "nameEnglish": "Rukmini Divine Pattern",
+      "category": "Gauri Mahalakshmi",
+      "desc": "वारकरी संप्रदाय आणि विठू-रुक्मिणीच्या सात्त्विक सौंदर्याची अनुभूती देणारा, दोन्ही बाजूंनी सुबक काठ व सात्विक पदर असणारा पॅटर्न.",
       "image": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=800&q=80",
-      "accent": "सात्त्विक व मोहक"
+      "accent": "सात्त्विक व मोहक",
+      "fabric": "पारंपरिक कॉटन / सिल्क",
+      "occasion": "पूजाविधी व देवकार्य",
+      "difficulty": "सुलभ व मोहक"
     },
     {
       "id": 4,
-      "nameMarathi": "नऊवारी पॅटर्न",
+      "nameMarathi": "क्लासिक नऊवारी पॅटर्न",
       "nameEnglish": "Classic Nauvari Pattern",
       "category": "Maharashtrian Classic",
-      "desc": "महाराष्ट्राची खरी ओळख असणारी अस्सल 9-वार साडी नेसण्याची पारंपरिक आणि सुलभ पद्धत.",
+      "desc": "महाराष्ट्राची खरी संस्कृती व शान असणारी पारंपरिक 9-वार साडी नेसण्याची शिस्तबद्ध, आरामदायक व चालताना सुटसुटीत पद्धत.",
       "image": "https://images.unsplash.com/photo-1596704017254-9b121068fb31?auto=format&fit=crop&w=800&q=80",
-      "accent": "अस्सल महाराष्ट्रीयन"
+      "accent": "अस्सल महाराष्ट्रीयन शान",
+      "fabric": "9-वार पैठणी / येवला सिल्क",
+      "occasion": "लग्नकार्य व सण",
+      "difficulty": "मूलभूत नऊवारी"
     },
     {
       "id": 5,
-      "nameMarathi": "गोल साडी",
-      "nameEnglish": "Gol Saree Drape",
-      "category": "Festive Modern",
-      "desc": "सुटसुटीत, आधुनिक आणि दिवसभर वावरायला अत्यंत हलकी व आरामदायी गोल साडी ड्रेपिंग पद्धत.",
-      "image": "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=800&q=80",
-      "accent": "आरामदायी व सोपी"
+      "nameMarathi": "पेशवाई मस्तानी नऊवारी",
+      "nameEnglish": "Peshwai Mastani Royal Nauvari",
+      "category": "Maharashtrian Classic",
+      "desc": "पेशवेकालीन राजघराण्यातील रुबाबदार थाट, पाठीमागे सुंदर पसरणारा काष्टा आणि पुढून नाजूक घोळ असणारा नवरीचा आवडता प्रकार.",
+      "image": "https://images.unsplash.com/photo-1610030469668-932ec596e730?auto=format&fit=crop&w=800&q=80",
+      "accent": "शाही राजेशाही लूक",
+      "fabric": "जरी काठ पैठणी / चंदेरी",
+      "occasion": "लग्न, नवरी व फोटोशूट",
+      "difficulty": "स्पेशल रॉयल ड्रॅपिंग"
     },
     {
       "id": 6,
-      "nameMarathi": "अप्सरा पॅटर्न",
-      "nameEnglish": "Apsara Pattern",
-      "category": "Designer Royal",
-      "desc": "शाही विवाहसोहळे व फोटोशूटसाठी अत्यंत लक्षवेधी, फ्लोइंग आणि नजाकतदार डिझायनर लूक.",
+      "nameMarathi": "ब्राह्मणी नऊवारी पॅटर्न",
+      "nameEnglish": "Brahmani Nauvari Pattern",
+      "category": "Maharashtrian Classic",
+      "desc": "अतिशय बारीक व शिस्तबद्ध ओच्या, पदराची विशिष्ट कलाकुसर आणि उच्च दर्जाची पारंपरिक नेसण, जी शरीरावर अगदी चपखल बसते.",
       "image": "https://images.unsplash.com/photo-1583391733975-02542a22fa5a?auto=format&fit=crop&w=800&q=80",
-      "accent": "रॉयल डिझायनर लूक"
+      "accent": "अचूक ओचा व प्लीट्स",
+      "fabric": "शुद्ध रेशमी नऊवारी",
+      "occasion": "धार्मिक विधी, मंगळागौर",
+      "difficulty": "बारीक तंत्रशुद्ध"
     },
     {
       "id": 7,
-      "nameMarathi": "डबल पदर पॅटर्न",
-      "nameEnglish": "Double Padar Pattern",
-      "category": "Festive Special",
-      "desc": "दोन वेगळे पदर आकर्षकरीत्या सेट करून तयार होणारा रिच आणि वजनदार राजेशाही साडी लूक.",
-      "image": "https://images.unsplash.com/photo-1610030469668-932ec596e730?auto=format&fit=crop&w=800&q=80",
-      "accent": "रिच व उठावदार"
+      "nameMarathi": "कोल्हापुरी काष्टा पॅटर्न",
+      "nameEnglish": "Kolhapuri Kashta Pattern",
+      "category": "Maharashtrian Classic",
+      "desc": "कोल्हापूरच्या मर्दानी आणि स्वाभिमानी परंपरेचे प्रतीक असलेला शिस्तबद्ध, चालताना अतिशय कम्फर्टेबल आणि सुबक काष्टा प्रकार.",
+      "image": "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80",
+      "accent": "स्वाभिमानी परंपरा",
+      "fabric": "इरकल / सुती नऊवारी",
+      "occasion": "पारंपरिक सण व मिरवणूक",
+      "difficulty": "कम्फर्टेबल व घट्ट"
     },
     {
       "id": 8,
-      "nameMarathi": "कोल्हापुरी काष्टा पॅटर्न",
-      "nameEnglish": "Kolhapuri Kashta Pattern",
-      "category": "Regional Heritage",
-      "desc": "कोल्हापूरच्या मर्दानी आणि स्वाभिमानी परंपरेचे प्रतीक असलेला शिस्तबद्ध व सुबक काष्टा.",
-      "image": "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80",
-      "accent": "स्वाभिमानी परंपरा"
+      "nameMarathi": "नऊवारी काष्टा स्पेशल",
+      "nameEnglish": "Nauvari Kashta Special",
+      "category": "Maharashtrian Classic",
+      "desc": "सण, उत्सव, लग्नकार्य आणि मंगळागौरीसाठी आवश्यक असणारा मुख्य काष्टा प्रकार, जो नवशिक्यांसाठीही समजायला सोपा केला आहे.",
+      "image": "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=800&q=80",
+      "accent": "उत्सवी क्लासिक",
+      "fabric": "सिल्क / कॉटन नऊवारी",
+      "occasion": "सण, उत्सव व लग्न",
+      "difficulty": "स्टेप-बाय-स्टेप सराव"
     },
     {
       "id": 9,
-      "nameMarathi": "ब्राह्मणी पॅटर्न",
-      "nameEnglish": "Brahmani Nauvari Pattern",
-      "category": "Heritage Elite",
-      "desc": "अतिशय बारीक व शिस्तबद्ध ओच्या, पदराची कलाकुसर आणि उच्च दर्जाची पारंपरिक नेसण.",
-      "image": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=800&q=80",
-      "accent": "अचूक ओचा व प्लीट्स"
+      "nameMarathi": "राजलक्ष्मी पॅटर्न",
+      "nameEnglish": "Rajlaxmi Royal Drape",
+      "category": "Maharashtrian Classic",
+      "desc": "धोती स्टाईल आणि रुंद काठ असलेल्या साड्यांसाठी एक अतिशय प्रतिष्ठित व पारंपरिक लूक, जो विशेष कार्यक्रमात लक्षवेधी ठरतो.",
+      "image": "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?auto=format&fit=crop&w=800&q=80",
+      "accent": "प्रतिष्ठित व राजेशाही",
+      "fabric": "कांजीवरम / गडवाल सिल्क",
+      "occasion": "रिसेप्शन, कौटुंबिक सोहळे",
+      "difficulty": "रॉयल फिनिशिंग"
     },
     {
       "id": 10,
-      "nameMarathi": "नऊवारी काष्टा पॅटर्न",
-      "nameEnglish": "Nauvari Kashta Special",
-      "category": "Maharashtrian Classic",
-      "desc": "सण, उत्सव, लग्नकार्य आणि मंगळागौरीसाठी आवश्यक असणारा मुख्य काष्टा प्रकार.",
-      "image": "https://images.unsplash.com/photo-1596704017254-9b121068fb31?auto=format&fit=crop&w=800&q=80",
-      "accent": "उत्सवी क्लासिक"
+      "nameMarathi": "डबल पदर अप्सरा पॅटर्न",
+      "nameEnglish": "Double Padar Apsara Pattern",
+      "category": "Designer Royal",
+      "desc": "उभारलेल्या मूर्ती किंवा उत्सवांसाठी गडद हिरवी साडी, खांद्यावरून मागे भव्य पंख्यासारखा पसरणारा लाल-सोनेरी पदर (डबल पदर), ठळक कंबरपट्टा, पारंपरिक दागिने आणि सुबक पुढील नक्षीदार प्लीट्स असलेला नजाकतदार अप्सरा लूक.",
+      "image": "https://images.unsplash.com/photo-1615886753866-79396abc446e?auto=format&fit=crop&w=800&q=80",
+      "accent": "डबल पदर अप्सरा",
+      "fabric": "गडद हिरवी सिल्क / पैठणी व कॉन्ट्रास्ट पदर",
+      "occasion": "गौरी महालक्ष्मी, विवाह व स्पेशल सोहळे",
+      "difficulty": "डबल पदर पंखा तंत्र"
     },
     {
       "id": 11,
       "nameMarathi": "देवसेना पॅटर्न",
-      "nameEnglish": "Devasena Pattern",
-      "category": "Cinematic Royal",
-      "desc": "सिनेमॅटिक व शाही थाट असणारा, रुबाबदार चाल आणि कम्फर्ट देणारा अत्यंत लोकप्रिय पॅटर्न.",
-      "image": "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=800&q=80",
-      "accent": "रुबाबदार व शाही"
+      "nameEnglish": "Devasena Royal Drape",
+      "category": "Designer Royal",
+      "desc": "सिनेमॅटिक व शाही थाट असणारा, रुबाबदार चाल आणि कम्फर्ट देणारा अत्यंत लोकप्रिय पॅटर्न, जो फोटोंमध्ये अप्रतिम दिसतो.",
+      "image": "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=800&q=80",
+      "accent": "रुबाबदार व सिनेमॅटिक",
+      "fabric": "सिल्क / ब्रोकेड साडी",
+      "occasion": "थीम वेडिंग, फोटोशूट",
+      "difficulty": "मॉडर्न रॉयल"
     },
     {
       "id": 12,
       "nameMarathi": "कमळ पॅटर्न",
       "nameEnglish": "Kamal (Lotus) Pattern",
-      "category": "Artistic Festive",
-      "desc": "कमळाच्या पाकळ्यांप्रमाणे निमुळत्या व सुंदर फुलणाऱ्या प्लेट्स असलेला अद्वितीय कलात्मक प्रकार.",
-      "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80",
-      "accent": "अद्वितीय कलात्मकता"
+      "category": "Designer Royal",
+      "desc": "कमळाच्या पाकळ्यांप्रमाणे निमुळत्या व एकावर एक सुंदर फुलणाऱ्या प्लेट्स असलेला अद्वितीय कलात्मक प्रकार, जो गौरीसाठीही वापरता येतो.",
+      "image": "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=800&q=80",
+      "accent": "अद्वितीय कलात्मकता",
+      "fabric": "मऊ सिल्क / बनारसी साडी",
+      "occasion": "गौरी पूजन व विशेष सोहळा",
+      "difficulty": "अचूक प्लीटिंग कला"
     },
     {
       "id": 13,
       "nameMarathi": "कमर पंखा पॅटर्न",
-      "nameEnglish": "Kamar Pankha Pattern",
-      "category": "Designer Accent",
-      "desc": "कमरेजवळ नाजूक पंख्यासारख्या सुबक प्लीट्सची नजाकत, जी साडीला अतिशय मोहक रूप देते.",
-      "image": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80",
-      "accent": "नाजूक व नजाकतदार"
+      "nameEnglish": "Kamar Pankha Pleated Accent",
+      "category": "Designer Royal",
+      "desc": "कमरेजवळ नाजूक पंख्यासारख्या सुबक प्लीट्सची नजाकत, जी साडीला अतिशय मोहक आणि वेस्टर्न-एथनिक फ्युजन रूप देते.",
+      "image": "https://images.unsplash.com/photo-1610030469830-4e386a3479d2?auto=format&fit=crop&w=800&q=80",
+      "accent": "नाजूक पंखा प्लीट्स",
+      "fabric": "सिल्क / ऑर्गेंझा साडी",
+      "occasion": "कॉकटेल, पार्टी, सण",
+      "difficulty": "प्री-प्लीटिंग तंत्र"
+    },
+    {
+      "id": 14,
+      "nameMarathi": "डबल पदर पॅटर्न",
+      "nameEnglish": "Double Padar Royal Pattern",
+      "category": "Designer Royal",
+      "desc": "दोन वेगळे पदर किंवा दोन कॉन्ट्रास्ट पदर आकर्षकरीत्या सेट करून तयार होणारा रिच, वजनदार आणि राजेशाही साडी लूक.",
+      "image": "https://images.unsplash.com/photo-1621784563330-caee0b138a00?auto=format&fit=crop&w=800&q=80",
+      "accent": "रिच व उठावदार पदर",
+      "fabric": "दोन कॉन्ट्रास्ट साड्या किंवा हेवी पल्लू",
+      "occasion": "शाही लग्न व रिसेप्शन",
+      "difficulty": "पदर बॅलन्सिंग"
+    },
+    {
+      "id": 15,
+      "nameMarathi": "गोल साडी आधुनिक पॅटर्न",
+      "nameEnglish": "Gol Saree Modern Drape",
+      "category": "Designer Royal",
+      "desc": "सुटसुटीत, आधुनिक आणि दिवसभर वावरायला अत्यंत हलकी व आरामदायी गोल साडी ड्रेपिंग पद्धत, ज्यामध्ये चालणे अतिशय सहज होते.",
+      "image": "https://images.unsplash.com/photo-1617627143778-592f155979ea?auto=format&fit=crop&w=800&q=80",
+      "accent": "आरामदायी व सोपी",
+      "fabric": "शिफॉन / जॉर्जेट / लिनन",
+      "occasion": "ऑफिस पार्टी, हळदीकुंकू",
+      "difficulty": "अतिशय सुलभ"
+    },
+    {
+      "id": 16,
+      "nameMarathi": "बटरफ्लाय / पंखा पदर पॅटर्न",
+      "nameEnglish": "Butterfly Pallu Designer Style",
+      "category": "Designer Royal",
+      "desc": "खांद्यावर नाजूक फुलपाखराच्या पंखांसारखी प्लीट्स रचना, ज्यामुळे ब्लाउजचे डिझाईन उठावदार दिसते आणि साडीला स्लिम व उंच लूक मिळतो.",
+      "image": "https://images.unsplash.com/photo-1610030469911-37d4f54d1aa4?auto=format&fit=crop&w=800&q=80",
+      "accent": "स्लिम व एलिगंट लूक",
+      "fabric": "नेट / जॉर्जेट / टिशू सिल्क",
+      "occasion": "संगीत, रिसेप्शन व पार्टी",
+      "difficulty": "पिनिंग व प्लीटिंग"
     }
   ],
   "whyLearn": [
@@ -276,39 +351,155 @@
   ],
   "galleryItems": [
     {
-      "title": "गौरी महालक्ष्मी साडी ड्रॅपिंग",
-      "subtitle": "भव्य नऊवारी व अलंकार",
+      "id": "g-1",
+      "title": "उभारलेले गौरी महालक्ष्मी साडी ड्रॅपिंग",
+      "subtitle": "उभारलेल्या मूर्तीसाठी भव्य नऊवारी व अलंकार",
       "category": "Gauri Draping",
+      "categoryMarathi": "गौरी महालक्ष्मी",
       "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80"
     },
     {
-      "title": "प्रमाणपत्र वितरण सोहळा",
-      "subtitle": "आनंदी व आत्मविश्वासी विद्यार्थिनी",
-      "category": "Certificates",
-      "image": "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1000&q=80"
+      "id": "g-2",
+      "title": "बसलेले गौरी साडी पॅटर्न",
+      "subtitle": "अचूक बैठक, न घसरणाऱ्या प्लेट्स व नजाकत",
+      "category": "Gauri Draping",
+      "categoryMarathi": "गौरी महालक्ष्मी",
+      "image": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1000&q=80"
     },
     {
-      "title": "प्री-प्लीटिंग व फिनिशिंग",
-      "subtitle": "अचूक पदर व प्लेट्स तंत्र",
-      "category": "Workshops",
+      "id": "g-3",
+      "title": "रुक्मिणी पारंपरिक सात्विक पॅटर्न",
+      "subtitle": "विठू-रुक्मिणी व वारकरी सात्त्विक पदर",
+      "category": "Gauri Draping",
+      "categoryMarathi": "गौरी महालक्ष्मी",
       "image": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1000&q=80"
     },
     {
-      "title": "पारंपरिक पेशवाई नऊवारी",
-      "subtitle": "अस्सल महाराष्ट्रीयन काष्टा",
+      "id": "g-4",
+      "title": "अस्सल महाराष्ट्रीयन नऊवारी काष्टा",
+      "subtitle": "पारंपरिक येवला पैठणी काष्टा ड्रॅपिंग",
       "category": "Nauvari",
+      "categoryMarathi": "नऊवारी व काष्टा",
       "image": "https://images.unsplash.com/photo-1596704017254-9b121068fb31?auto=format&fit=crop&w=1000&q=80"
     },
     {
-      "title": "हँड्स-ऑन वर्कशॉप क्षण",
-      "subtitle": "प्रत्यक्ष प्रात्यक्षिक व सराव",
-      "category": "Workshops",
+      "id": "g-5",
+      "title": "पेशवाई मस्तानी रॉयल नऊवारी",
+      "subtitle": "नवरी व विवाह सोहळ्यासाठी राजेशाही लूक",
+      "category": "Nauvari",
+      "categoryMarathi": "नऊवारी व काष्टा",
+      "image": "https://images.unsplash.com/photo-1610030469668-932ec596e730?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      "id": "g-6",
+      "title": "ब्राह्मणी नऊवारी तंत्रशुद्ध ड्रॅपिंग",
+      "subtitle": "अचूक बारीक ओचा व नेटके पदर प्लीट्स",
+      "category": "Nauvari",
+      "categoryMarathi": "नऊवारी व काष्टा",
       "image": "https://images.unsplash.com/photo-1583391733975-02542a22fa5a?auto=format&fit=crop&w=1000&q=80"
     },
     {
-      "title": "उत्सवी पैठणी ड्रॅपिंग",
-      "subtitle": "सुबक बॉर्डर व पदर सेटिंग",
-      "category": "Festive",
+      "id": "g-7",
+      "title": "कोल्हापुरी काष्टा पॅटर्न",
+      "subtitle": "मर्दानी शान व चालताना संपूर्ण कम्फर्ट",
+      "category": "Nauvari",
+      "categoryMarathi": "नऊवारी व काष्टा",
+      "image": "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      "id": "g-8",
+      "title": "राजलक्ष्मी रॉयल साडी ड्रॅपिंग",
+      "subtitle": "प्रतिष्ठित धोती स्टाईल व रुंद काठ पदर",
+      "category": "Nauvari",
+      "categoryMarathi": "नऊवारी व काष्टा",
+      "image": "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      "id": "g-9",
+      "title": "डबल पदर अप्सरा डिझायनर पॅटर्न",
+      "subtitle": "गडद हिरवी साडी व लाल-सोनेरी पंखा डबल पदर",
+      "category": "Designer",
+      "categoryMarathi": "डिझायनर व रॉयल",
+      "image": "https://images.unsplash.com/photo-1615886753866-79396abc446e?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      "id": "g-10",
+      "title": "देवसेना सिनेमॅटिक रॉयल साडी",
+      "subtitle": "शाही थाट व फोटोशूटसाठी परफेक्ट ड्रॅपिंग",
+      "category": "Designer",
+      "categoryMarathi": "डिझायनर व रॉयल",
+      "image": "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      "id": "g-11",
+      "title": "कमळ (Lotus) पाकळी पॅटर्न",
+      "subtitle": "कमळाच्या पाकळ्यांप्रमाणे फुलणाऱ्या सुंदर प्लीट्स",
+      "category": "Designer",
+      "categoryMarathi": "डिझायनर व रॉयल",
+      "image": "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      "id": "g-12",
+      "title": "कमर पंखा डिझायनर ॲक्सेंट",
+      "subtitle": "कमरेजवळ नाजूक वेस्टर्न-एथनिक पंखा प्लीट्स",
+      "category": "Designer",
+      "categoryMarathi": "डिझायनर व रॉयल",
+      "image": "https://images.unsplash.com/photo-1610030469830-4e386a3479d2?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      "id": "g-13",
+      "title": "डबल पदर रॉयल साडी",
+      "subtitle": "दोन पदरांची भव्यता व रिच लूक",
+      "category": "Designer",
+      "categoryMarathi": "डिझायनर व रॉयल",
+      "image": "https://images.unsplash.com/photo-1621784563330-caee0b138a00?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      "id": "g-14",
+      "title": "बटरफ्लाय / पंखा पदर पॅटर्न",
+      "subtitle": "खांद्यावर स्लिम व मॉडर्न एलिगंट प्लीट्स",
+      "category": "Designer",
+      "categoryMarathi": "डिझायनर व रॉयल",
+      "image": "https://images.unsplash.com/photo-1610030469911-37d4f54d1aa4?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      "id": "g-15",
+      "title": "गोल साडी आधुनिक ड्रॅपिंग",
+      "subtitle": "सुटसुटीत, आरामदायक व दिवसभर वावरायला सोपी",
+      "category": "Designer",
+      "categoryMarathi": "डिझायनर व रॉयल",
+      "image": "https://images.unsplash.com/photo-1617627143778-592f155979ea?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      "id": "g-16",
+      "title": "वर्कशॉप प्रात्यक्षिक व हँड्स-ऑन सराव",
+      "subtitle": "विद्यार्थिनींचा स्वतः हाताने प्रत्यक्ष साडी ड्रॅपिंग सराव",
+      "category": "Workshops",
+      "categoryMarathi": "वर्कशॉप सराव",
+      "image": "https://images.unsplash.com/photo-1583391733975-02542a22fa5a?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      "id": "g-17",
+      "title": "प्री-प्लीटिंग, पिनिंग व फिनिशिंग",
+      "subtitle": "अचूक पदर, इस्त्री आणि वेळेची बचत करणारे तंत्र",
+      "category": "Workshops",
+      "categoryMarathi": "वर्कशॉप सराव",
+      "image": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      "id": "g-18",
+      "title": "सर्टिफिकेट वितरण व आनंदी विद्यार्थिनी",
+      "subtitle": "1-डे वर्कशॉप यशस्वीरीत्या पूर्ण केल्याचे प्रमाणपत्र",
+      "category": "Certificates",
+      "categoryMarathi": "प्रमाणपत्र",
+      "image": "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      "id": "g-19",
+      "title": "उत्सवी पैठणी साडी ड्रॅपिंग फिनिश",
+      "subtitle": "सण आणि पूजेसाठी परिपूर्ण महाराष्ट्रीयन सौंदर्य",
+      "category": "Gauri Draping",
+      "categoryMarathi": "गौरी महालक्ष्मी",
       "image": "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=1000&q=80"
     }
   ],

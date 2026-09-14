@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Phone, MessageCircle, Menu, X, Star, MapPin } from 'lucide-react';
+import { Phone, MessageCircle, Menu, X, Star, MapPin, ShieldCheck } from 'lucide-react';
 
 interface NavbarProps {
   onBookClick: () => void;
+  onAdminClick?: () => void;
 }
 
-export default function Navbar({ onBookClick }: NavbarProps) {
+export default function Navbar({ onBookClick, onAdminClick }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -58,6 +59,16 @@ export default function Navbar({ onBookClick }: NavbarProps) {
               <Phone className="w-3.5 h-3.5" />
               <span>84469 17187</span>
             </a>
+            {onAdminClick && (
+              <button
+                onClick={onAdminClick}
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/10 hover:bg-white/25 text-amber-200 hover:text-white text-[11px] font-semibold transition-colors cursor-pointer border border-amber-300/30"
+                title="पूजा ताई Admin CMS Portal"
+              >
+                <ShieldCheck className="w-3 h-3 text-amber-300" />
+                <span>ॲडमिन पॅनेल</span>
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -101,12 +112,23 @@ export default function Navbar({ onBookClick }: NavbarProps) {
           </div>
 
           {/* Action CTAs */}
-          <div className="hidden sm:flex items-center gap-2.5">
+          <div className="hidden sm:flex items-center gap-2">
+            {onAdminClick && (
+              <button
+                onClick={onAdminClick}
+                className="inline-flex items-center gap-1 px-3 py-2 rounded-full border border-amber-400/60 bg-amber-50/70 hover:bg-amber-100 text-[#4A1521] text-xs font-semibold transition-colors cursor-pointer shadow-xs"
+                title="पूजा ताई Admin Panel"
+              >
+                <ShieldCheck className="w-3.5 h-3.5 text-[#8B1E3F]" />
+                <span>ॲडमिन</span>
+              </button>
+            )}
+
             <a
               href="https://wa.me/918446917187?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%95%E0%A4%BE%E0%A4%B0%20%E0%A4%AA%E0%A5%82%E0%A4%9C%E0%A4%BE%20%E0%A4%AE%E0%A5%87%E0%A4%A1%E0%A4%AE%2C%0A%E0%A4%AE%E0%A4%B2%E0%A4%BE%20%E0%A4%B8%E0%A4%BE%E0%A4%A1%E0%A5%80%20%E0%A4%A1%E0%A5%8D%E0%A4%B0%E0%A5%85%E0%A4%AA%E0%A4%BF%E0%A4%82%E0%A4%97%20%E0%A4%B5%E0%A4%B0%E0%A5%8D%E0%A4%95%E0%A4%B6%E0%A5%8Params%E0%A4%AC%E0%A4%A6%E0%A5%8D%E0%A4%A6%E0%A4%B2%20%E0%A4%AE%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%A4%E0%A5%80%20%E0%A4%B9%E0%A4%B5%E0%A5%80%20%E0%A4%86%E0%A4%B9%E0%A5%87.%0A%E0%A4%95%E0%A5%83%E0%A4%AA%E0%A4%AF%E0%A4%BE%20%E0%A4%AE%E0%A4%B2%E0%A4%BE%20%E0%A4%AA%E0%A5%81%E0%A4%A2%E0%A5%80%E0%A4%B2%20workshop%20%E0%A4%9A%E0%A5%80%20%E0%A4%AE%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%A4%E0%A5%80%20%E0%A4%AA%E0%A4%BE%E0%A4%A0%E0%A4%B5%E0%A4%BE."
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-emerald-600/30 text-emerald-800 bg-emerald-50/70 hover:bg-emerald-100/80 text-xs font-semibold transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-emerald-600/30 text-emerald-800 bg-emerald-50/70 hover:bg-emerald-100/80 text-xs font-semibold transition-colors"
             >
               <MessageCircle className="w-4 h-4 text-emerald-600 fill-emerald-600/20" />
               <span>WhatsApp</span>
@@ -122,6 +144,16 @@ export default function Navbar({ onBookClick }: NavbarProps) {
 
           {/* Mobile Hamburger Toggle */}
           <div className="flex items-center gap-2 lg:hidden">
+            {onAdminClick && (
+              <button
+                onClick={onAdminClick}
+                className="px-2.5 py-1.5 rounded-full bg-amber-100/80 border border-amber-300 text-[#4A1521] text-[11px] font-bold shadow-xs flex items-center gap-1"
+                title="Admin"
+              >
+                <ShieldCheck className="w-3.5 h-3.5 text-[#8B1E3F]" />
+                <span>ॲडमिन</span>
+              </button>
+            )}
             <button
               onClick={onBookClick}
               className="px-3 py-1.5 rounded-full bg-[#8B1E3F] text-white text-xs font-semibold shadow-sm sm:hidden"
@@ -178,6 +210,18 @@ export default function Navbar({ onBookClick }: NavbarProps) {
                 >
                   वर्कशॉप नोंदणी फॉर्म उघडा
                 </button>
+                {onAdminClick && (
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onAdminClick();
+                    }}
+                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-300 text-[#4A1521] text-xs font-bold"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-[#8B1E3F]" />
+                    <span>🔐 ॲडमिन पॅनेल (Admin CMS)</span>
+                  </button>
+                )}
               </div>
             </div>
           </div>

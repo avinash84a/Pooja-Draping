@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Calendar,
   Clock,
@@ -33,8 +33,46 @@ const DEFAULT_WORKSHOP_CONFIG: WorkshopConfig = {
 };
 
 export default function WorkshopSection({ onBookClick }: WorkshopSectionProps) {
-  const [config, setConfig] = useState<WorkshopConfig>(DEFAULT_WORKSHOP_CONFIG);
+  const [config, setConfig] = useState<WorkshopConfig>(() => {
+    if (typeof window === 'undefined') return DEFAULT_WORKSHOP_CONFIG;
+    try {
+      const saved = localStorage.getItem('pooja_workshop_config');
+      return saved ? JSON.parse(saved) : DEFAULT_WORKSHOP_CONFIG;
+    } catch {
+      return DEFAULT_WORKSHOP_CONFIG;
+    }
+  });
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  useEffect(() => {
+    const handleConfigUpdate = () => {
+      try {
+        const saved = localStorage.getItem('pooja_workshop_config');
+        if (saved) {
+          setConfig(JSON.parse(saved));
+        }
+      } catch {
+        // ignore
+      }
+    };
+
+    window.addEventListener('pooja_workshop_updated', handleConfigUpdate);
+    window.addEventListener('storage', handleConfigUpdate);
+    return () => {
+      window.removeEventListener('pooja_workshop_updated', handleConfigUpdate);
+      window.removeEventListener('storage', handleConfigUpdate);
+    };
+  }, []);
+
+  const handleSaveConfig = (newConfig: WorkshopConfig) => {
+    setConfig(newConfig);
+    try {
+      localStorage.setItem('pooja_workshop_config', JSON.stringify(newConfig));
+    } catch {
+      // ignore
+    }
+    window.dispatchEvent(new Event('pooja_workshop_updated'));
+  };
 
   const keyHighlights = [
     'उभारलेल्या व बसलेल्या गौरीचे 14+ पारंपारिक व डिझायनर पॅटर्न',
@@ -248,7 +286,7 @@ export default function WorkshopSection({ onBookClick }: WorkshopSectionProps) {
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         config={config}
-        onSave={(newConfig) => setConfig(newConfig)}
+        onSave={handleSaveConfig}
         defaultConfig={DEFAULT_WORKSHOP_CONFIG}
       />
     </section>

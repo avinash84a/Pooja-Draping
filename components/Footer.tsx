@@ -11,9 +11,14 @@ import {
   ExternalLink,
   Heart,
   ArrowUp,
+  ShieldCheck,
 } from 'lucide-react';
 
-export default function Footer() {
+interface FooterProps {
+  onAdminClick?: () => void;
+}
+
+export default function Footer({ onAdminClick }: FooterProps) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -106,6 +111,17 @@ export default function Footer() {
                   प्रश्नोत्तरे (FAQs)
                 </a>
               </li>
+              {onAdminClick && (
+                <li className="pt-1 border-t border-white/10">
+                  <button
+                    onClick={onAdminClick}
+                    className="inline-flex items-center gap-1.5 text-amber-300 hover:text-amber-200 font-semibold transition-colors cursor-pointer"
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span>🔐 ॲडमिन पॅनेल (Admin CMS)</span>
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
 
@@ -193,9 +209,19 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#BA9FA4]">
-          <p>
-            © {new Date().getFullYear()} Pooja Saree Draping Pune. All rights reserved.
-          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <p>
+              © {new Date().getFullYear()} Pooja Saree Draping Pune. All rights reserved.
+            </p>
+            {onAdminClick && (
+              <button
+                onClick={onAdminClick}
+                className="text-gray-400 hover:text-amber-300 transition-colors text-[11px] underline underline-offset-2 cursor-pointer"
+              >
+                व्यवस्थापक लॉगिन (Admin Portal)
+              </button>
+            )}
+          </div>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
               Made with <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> for Pune Women
